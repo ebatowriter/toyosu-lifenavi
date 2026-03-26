@@ -256,13 +256,13 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   // 決済成功
   if (params.get('checkout') === 'success') {
-    // ユーザー情報を再取得してプランを更新
     if (Auth.isLoggedIn()) {
       await AuthAPI.getMe().catch(() => {});
     }
     window.history.replaceState({}, '', window.location.pathname);
     if (typeof showApp === 'function') showApp();
     alert('✅ ご登録ありがとうございます！豊洲ライフナビをご利用いただけます。');
+    return;
   }
 
   // メール確認完了
@@ -271,14 +271,15 @@ window.addEventListener('DOMContentLoaded', async () => {
     alert('✅ メールアドレスの確認が完了しました。');
   }
 
-  // 自動ログイン（既存セッションがある場合）
+  // 自動ログイン（既存セッションがある場合のみ）
   if (Auth.isLoggedIn()) {
     try {
       const { user } = await AuthAPI.getMe();
-      if (user.plan !== 'none' && typeof showApp === 'function') {
+      if (user && user.plan !== 'none' && typeof showApp === 'function') {
         showApp();
       }
     } catch {
+      // トークンが無効な場合はクリア（エラーは出さない）
       Auth.clearTokens();
     }
   }
