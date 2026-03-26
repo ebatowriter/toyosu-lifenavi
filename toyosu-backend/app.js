@@ -96,7 +96,7 @@ app.get('/api/health', (req, res) => {
 // ====================================================
 // フロントエンドのSPAフォールバック
 // ====================================================
-app.get('*', (req, res) => {
+app.get('/{*path}', (req, res) => {
   if (req.path.startsWith('/api/')) {
     return res.status(404).json({ error: 'エンドポイントが見つかりません' });
   }
