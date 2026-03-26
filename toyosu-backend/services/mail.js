@@ -62,57 +62,60 @@ function wrapHtml(title, body) {
 // ウェルカムメール（登録確認）
 // ====================================================
 async function sendWelcomeEmail(email, name, verifyToken) {
-  const verifyUrl = `${process.env.FRONTEND_URL}/api/auth/verify-email/${verifyToken}`;
-  const html = wrapHtml('豊洲ライフナビへようこそ！', `
-    <p>${name} 様</p>
-    <p>豊洲ライフナビにご登録いただき、ありがとうございます。</p>
-    <p>以下のボタンからメールアドレスを確認してください。</p>
-    <a href="${verifyUrl}" class="btn">メールアドレスを確認する</a>
-    <div class="box">
-      <p>ボタンが機能しない場合は、以下のURLをブラウザに貼り付けてください：<br>
-      <a href="${verifyUrl}">${verifyUrl}</a></p>
-    </div>
-    <p>豊洲の暮らしをAIがサポートします。まずはサブスクリプションプランをお選びください。</p>
-    <a href="${process.env.FRONTEND_URL}/pricing.html" class="btn" style="background:#0f1e38;color:#c9a84c">プランを選択する</a>
-  `);
-
-  await getTransporter().sendMail({
-    from: process.env.MAIL_FROM,
-    to: email,
-    subject: '【豊洲ライフナビ】メールアドレスの確認をお願いします',
-    html,
-  });
+  try {
+    const verifyUrl = `${process.env.FRONTEND_URL}/api/auth/verify-email/${verifyToken}`;
+    const html = wrapHtml('豊洲ライフナビへようこそ！', `
+      <p>${name} 様</p>
+      <p>豊洲ライフナビにご登録いただき、ありがとうございます。</p>
+      <p>以下のボタンからメールアドレスを確認してください。</p>
+      <a href="${verifyUrl}" class="btn">メールアドレスを確認する</a>
+      <div class="box">
+        <p>ボタンが機能しない場合は、以下のURLをブラウザに貼り付けてください：<br>
+        <a href="${verifyUrl}">${verifyUrl}</a></p>
+      </div>
+      <a href="${process.env.FRONTEND_URL}/pricing.html" class="btn" style="background:#0f1e38;color:#c9a84c">プランを選択する</a>
+    `);
+    await getTransporter().sendMail({
+      from: process.env.MAIL_FROM,
+      to: email,
+      subject: '【豊洲ライフナビ】メールアドレスの確認をお願いします',
+      html,
+    });
+  } catch (err) {
+    console.error('[MAIL] sendWelcomeEmail failed (non-fatal):', err.message);
+  }
 }
 
 // ====================================================
 // サブスクリプション開始確認メール
 // ====================================================
 async function sendSubscriptionConfirmEmail(email, name, plan) {
-  const planName = plan === 'premium' ? 'プレミアムプラン（¥4,980/月）' : 'スタンダードプラン（¥2,980/月）';
-  const features = plan === 'premium'
-    ? ['AIチャット無制限', '中学受験AIアドバイザー（フル機能）', '不動産資産価値シミュレーター詳細版', '防災プランナー個別プラン生成']
-    : ['AIチャット（月100回）', '防災プランナー（基本版）', '資産価値情報', '医療・行政・子育て情報'];
+  try {
+    const planName = plan === 'premium' ? 'プレミアムプラン（¥4,980/月）' : 'スタンダードプラン（¥2,980/月）';
+    const features = plan === 'premium'
+      ? ['AIチャット無制限', '中学受験AIアドバイザー（フル機能）', '不動産資産価値シミュレーター詳細版', '防災プランナー個別プラン生成']
+      : ['AIチャット（月100回）', '防災プランナー（基本版）', '資産価値情報', '医療・行政・子育て情報'];
 
-  const html = wrapHtml('ご登録ありがとうございます', `
-    <p>${name} 様</p>
-    <p>豊洲ライフナビへのご登録が完了しました。</p>
-    <div class="box">
-      <p><strong>ご登録プラン：</strong>${planName}</p>
-    </div>
-    <p><strong>ご利用可能な機能：</strong></p>
-    <ul style="color:#6b6560;font-size:14px;line-height:2">
-      ${features.map(f => `<li>${f}</li>`).join('')}
-    </ul>
-    <a href="${process.env.FRONTEND_URL}/?app=1" class="btn">サービスを利用する</a>
-    <p style="font-size:12px;color:#9a9490">解約はマイページからいつでも即日対応可能です。違約金・解約手数料はかかりません。</p>
-  `);
-
-  await getTransporter().sendMail({
-    from: process.env.MAIL_FROM,
-    to: email,
-    subject: `【豊洲ライフナビ】${plan === 'premium' ? 'プレミアム' : 'スタンダード'}プランのご登録が完了しました`,
-    html,
-  });
+    const html = wrapHtml('ご登録ありがとうございます', `
+      <p>${name} 様</p>
+      <p>豊洲ライフナビへのご登録が完了しました。</p>
+      <div class="box">
+        <p><strong>ご登録プラン：</strong>${planName}</p>
+      </div>
+      <ul style="color:#6b6560;font-size:14px;line-height:2">
+        ${features.map(f => `<li>${f}</li>`).join('')}
+      </ul>
+      <a href="${process.env.FRONTEND_URL}/?app=1" class="btn">サービスを利用する</a>
+    `);
+    await getTransporter().sendMail({
+      from: process.env.MAIL_FROM,
+      to: email,
+      subject: `【豊洲ライフナビ】${plan === 'premium' ? 'プレミアム' : 'スタンダード'}プランのご登録が完了しました`,
+      html,
+    });
+  } catch (err) {
+    console.error('[MAIL] sendSubscriptionConfirmEmail failed (non-fatal):', err.message);
+  }
 }
 
 // ====================================================
