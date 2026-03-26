@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>対応エリア｜豊洲ライフナビ — 豊洲から勝鬨・月島・銀座へ展開予定</title>
+  <meta name="description" content="豊洲ライフナビの対応エリア情報。現在は豊洲・湾岸エリアに対応。将来は勝鬨駅・月島駅・銀座駅エリアへの展開を予定しています。">
+  <link rel="canonical" href="https://toyosu-lifenavi.jp/area.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    body { padding-top: 64px; }
+    .area-wrap { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
+    .area-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 2.5rem; }
+    .area-card { border: 2px solid var(--gray-200); border-radius: var(--radius-lg); padding: 2rem; background: white; position: relative; overflow: hidden; }
+    .area-card.active { border-color: var(--gold); background: linear-gradient(160deg, rgba(201,168,76,0.04), white); }
+    .area-card.soon { opacity: 0.75; }
+    .area-status { display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px; border-radius: 2px; margin-bottom: 1rem; }
+    .status-active { background: rgba(201,168,76,0.15); color: #7a5e1a; }
+    .status-soon { background: rgba(15,30,56,0.06); color: var(--navy); }
+    .area-name { font-family: 'Shippori Mincho', serif; font-size: 1.2rem; font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; }
+    .area-station { font-size: 0.8rem; color: var(--text-light); margin-bottom: 1rem; }
+    .area-features { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .area-features li { font-size: 0.8rem; color: var(--text-light); display: flex; align-items: center; gap: 6px; }
+    .area-features li::before { content: ''; width: 5px; height: 5px; background: var(--gray-400); border-radius: 50%; flex-shrink: 0; }
+    .area-card.active .area-features li::before { background: var(--gold); }
+    .coming-band { background: var(--navy); color: rgba(255,255,255,0.6); text-align: center; padding: 0.6rem; font-size: 0.72rem; position: absolute; top: 0; right: 0; width: 80px; }
+    .notify-form { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 2rem; margin-top: 3rem; }
+    .notify-title { font-family: 'Shippori Mincho', serif; font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; }
+    .notify-desc { font-size: 0.85rem; color: var(--text-light); margin-bottom: 1.5rem; }
+    .notify-form-inner { display: flex; gap: 1rem; max-width: 480px; }
+    .notify-input { flex: 1; padding: 11px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius); font-family: 'Noto Sans JP', sans-serif; font-size: 0.875rem; outline: none; }
+    .notify-input:focus { border-color: var(--navy); }
+    @media (max-width: 900px) { .area-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .area-grid { grid-template-columns: 1fr; } .notify-form-inner { flex-direction: column; } }
+  </style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-grid"></div>
+  <div class="page-hero-inner">
+    <div class="breadcrumb"><a href="index.html">ホーム</a><span class="breadcrumb-sep">/</span><a href="area.html">対応エリア</a></div>
+    <div class="page-label">対応エリア</div>
+    <h1 class="page-title">豊洲から始まり、<br>湾岸・都心の富裕層エリアへ</h1>
+    <p class="page-subtitle">現在は豊洲エリアに特化。将来は勝鬨・月島・銀座・晴海など、東京湾岸・都心の富裕層エリアへ順次展開します。</p>
+  </div>
+</section>
+
+<div class="area-wrap">
+  <div class="section-label">現在の対応エリア</div>
+  <h2 class="section-title">エリア展開ロードマップ</h2>
+  <p class="section-subtitle">各エリア固有の住民ニーズを深く調査し、そのエリアだけに特化したサービスを設計して展開します。</p>
+
+  <div class="area-grid">
+    <div class="area-card active">
+      <div class="area-status status-active">現在対応中</div>
+      <div class="area-name">豊洲エリア</div>
+      <div class="area-station">豊洲駅・新豊洲駅 / 江東区豊洲1〜6丁目</div>
+      <ul class="area-features">
+        <li>中学受験AIアドバイザー</li>
+        <li>防災プランナー（液状化対応）</li>
+        <li>資産価値シミュレーター</li>
+        <li>医療ナビ・子育てサポート</li>
+        <li>24時間AIチャット</li>
+      </ul>
+    </div>
+    <div class="area-card soon">
+      <div style="position:absolute;top:0;right:0;background:var(--navy);color:rgba(255,255,255,0.6);font-size:0.65rem;padding:5px 10px;letter-spacing:0.05em">COMING SOON</div>
+      <div class="area-status status-soon">2026年下半期予定</div>
+      <div class="area-name">勝鬨・月島エリア</div>
+      <div class="area-station">勝鬨駅・月島駅 / 中央区勝どき・月島</div>
+      <ul class="area-features">
+        <li>中央区アドレスの資産価値分析</li>
+        <li>月島もんじゃ文化圏の生活情報</li>
+        <li>晴海通りの再開発動向</li>
+        <li>築地市場跡地開発の影響分析</li>
+      </ul>
+    </div>
+    <div class="area-card soon">
+      <div style="position:absolute;top:0;right:0;background:var(--navy);color:rgba(255,255,255,0.6);font-size:0.65rem;padding:5px 10px;letter-spacing:0.05em">COMING SOON</div>
+      <div class="area-status status-soon">2027年予定</div>
+      <div class="area-name">銀座・日比谷エリア</div>
+      <div class="area-station">銀座駅・有楽町駅 / 中央区銀座</div>
+      <ul class="area-features">
+        <li>富裕層向け資産価値・投資分析</li>
+        <li>高級マンション管理コスト分析</li>
+        <li>インターナショナルスクール情報</li>
+        <li>プライベートバンキング連携（予定）</li>
+      </ul>
+    </div>
+    <div class="area-card soon">
+      <div style="position:absolute;top:0;right:0;background:var(--navy);color:rgba(255,255,255,0.6);font-size:0.65rem;padding:5px 10px;letter-spacing:0.05em">COMING SOON</div>
+      <div class="area-status status-soon">2027年予定</div>
+      <div class="area-name">晴海・有明エリア</div>
+      <div class="area-station">晴海・有明 / 中央区晴海・江東区有明</div>
+      <ul class="area-features">
+        <li>晴海フラッグ住民向け特化機能</li>
+        <li>有楽町線延伸の影響分析</li>
+        <li>オリンピックレガシー活用情報</li>
+      </ul>
+    </div>
+    <div class="area-card soon">
+      <div style="position:absolute;top:0;right:0;background:var(--navy);color:rgba(255,255,255,0.6);font-size:0.65rem;padding:5px 10px;letter-spacing:0.05em">COMING SOON</div>
+      <div class="area-status status-soon">2027年以降予定</div>
+      <div class="area-name">港区湾岸エリア</div>
+      <div class="area-station">芝浦・品川・天王洲 / 港区</div>
+      <ul class="area-features">
+        <li>港区アドレスの超高級物件分析</li>
+        <li>国際企業勤務者向けサポート</li>
+        <li>外国語対応（英語・中国語）</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="notify-form">
+    <div class="notify-title">新エリアリリース時にお知らせ</div>
+    <p class="notify-desc">勝鬨・月島・銀座エリアのリリース時に最優先でご案内します。豊洲版プレミアム会員の方は自動的に対象となります。</p>
+    <div class="notify-form-inner">
+      <input type="email" class="notify-input" placeholder="メールアドレスを入力">
+      <button class="btn-primary" style="font-size:0.85rem;padding:11px 20px" onclick="notifySignup()">先行登録する</button>
+    </div>
+  </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<script src="shared-components.js"></script>
+<script>
+function notifySignup() {
+  alert('先行登録を受け付けました。新エリアリリース時にご連絡します。');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お問い合わせ｜豊洲ライフナビ</title>
+  <meta name="description" content="豊洲ライフナビへのお問い合わせフォーム。ご質問・ご要望・技術的なお問い合わせはこちらから。">
+  <link rel="canonical" href="https://toyosu-lifenavi.jp/contact.html">
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    body { padding-top: 64px; background: var(--gray-50); }
+    .contact-wrap { max-width: 640px; margin: 0 auto; padding: 4rem 2rem; }
+    .contact-form { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 2.5rem; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-label { display: block; font-size: 0.78rem; font-weight: 700; color: var(--navy); margin-bottom: 0.4rem; }
+    .form-label .required { color: #c0392b; margin-left: 4px; font-size: 0.7rem; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: 11px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius);
+      font-family: 'Noto Sans JP', sans-serif; font-size: 0.875rem; color: var(--text); background: white;
+      transition: border-color 0.2s; outline: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--navy); }
+    .form-textarea { resize: vertical; min-height: 140px; }
+    .submit-btn {
+      width: 100%; padding: 14px; background: var(--gold); color: var(--navy);
+      font-family: 'Noto Sans JP', sans-serif; font-weight: 700; font-size: 0.95rem;
+      border: none; border-radius: var(--radius); cursor: pointer; transition: all 0.2s; letter-spacing: 0.03em;
+    }
+    .submit-btn:hover { background: var(--gold-light); }
+    .contact-note { font-size: 0.78rem; color: var(--text-light); text-align: center; margin-top: 1rem; line-height: 1.6; }
+    .success-box { display: none; background: rgba(39,174,96,0.08); border: 1px solid #27ae60; border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; }
+    .success-box.visible { display: block; }
+    .success-title { font-family: 'Shippori Mincho', serif; font-size: 1rem; font-weight: 700; color: #1a7a45; margin-bottom: 0.5rem; }
+    .success-text { font-size: 0.85rem; color: #2d7a50; }
+  </style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-grid"></div>
+  <div class="page-hero-inner">
+    <div class="breadcrumb"><a href="index.html">ホーム</a><span class="breadcrumb-sep">/</span><a href="contact.html">お問い合わせ</a></div>
+    <div class="page-label">お問い合わせ</div>
+    <h1 class="page-title">お問い合わせ</h1>
+    <p class="page-subtitle">ご質問・ご要望・ご意見をお気軽にどうぞ。通常2営業日以内にご返答いたします。</p>
+  </div>
+</section>
+
+<div class="contact-wrap">
+  <div class="contact-form" id="contact-form-wrap">
+    <div class="form-group">
+      <label class="form-label">お名前<span class="required">必須</span></label>
+      <input type="text" class="form-input" id="contact-name" placeholder="山田 太郎">
+    </div>
+    <div class="form-group">
+      <label class="form-label">メールアドレス<span class="required">必須</span></label>
+      <input type="email" class="form-input" id="contact-email" placeholder="example@gmail.com">
+    </div>
+    <div class="form-group">
+      <label class="form-label">お問い合わせ種別</label>
+      <select class="form-select" id="contact-type">
+        <option value="">選択してください</option>
+        <option value="service">サービスについて</option>
+        <option value="billing">料金・支払いについて</option>
+        <option value="technical">技術的な問題</option>
+        <option value="cancel">解約について</option>
+        <option value="feature">機能のご要望</option>
+        <option value="media">取材・メディア関係</option>
+        <option value="other">その他</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">お問い合わせ内容<span class="required">必須</span></label>
+      <textarea class="form-textarea" id="contact-message" placeholder="お問い合わせ内容をご記入ください。"></textarea>
+    </div>
+    <button class="submit-btn" onclick="submitContact()">送信する</button>
+    <p class="contact-note">送信後、確認メールが届きます。メールが届かない場合は迷惑メールフォルダをご確認ください。<br>直接メールでのご連絡：<a href="mailto:info@toyosu-lifenavi.jp" style="color:var(--bay-blue)">info@toyosu-lifenavi.jp</a></p>
+  </div>
+
+  <div class="success-box" id="success-box">
+    <div class="success-title">送信完了</div>
+    <p class="success-text">お問い合わせを受け付けました。<br>通常2営業日以内にご登録のメールアドレス宛にご返答いたします。</p>
+  </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<script src="shared-components.js"></script>
+<script>
+function submitContact() {
+  const name = document.getElementById('contact-name').value;
+  const email = document.getElementById('contact-email').value;
+  const msg = document.getElementById('contact-message').value;
+  if (!name || !email || !msg) { alert('必須項目をすべてご入力ください。'); return; }
+  document.getElementById('contact-form-wrap').style.display = 'none';
+  document.getElementById('success-box').classList.add('visible');
+}
+</script>
+</body>
+</html>

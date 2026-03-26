@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>よくある質問（FAQ）｜豊洲ライフナビ</title>
+  <meta name="description" content="豊洲ライフナビに関するよくある質問。料金・解約・AIの精度・対応エリア・プライバシーなど、疑問点を全て解決します。">
+  <link rel="canonical" href="https://toyosu-lifenavi.jp/faq.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    body { padding-top: 64px; background: var(--gray-50); }
+    .faq-wrap { max-width: 800px; margin: 0 auto; padding: 4rem 2rem; }
+    .faq-category { margin-bottom: 3rem; }
+    .faq-category-title { font-family: 'Shippori Mincho', serif; font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 1.25rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--gold); display: flex; align-items: center; gap: 8px; }
+    .faq-item { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius); margin-bottom: 0.75rem; overflow: hidden; }
+    .faq-q-btn {
+      width: 100%; text-align: left; padding: 1.1rem 1.25rem; background: none; border: none; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem; font-family: 'Noto Sans JP', sans-serif;
+    }
+    .faq-q-text { font-size: 0.9rem; font-weight: 600; color: var(--navy); line-height: 1.5; }
+    .faq-q-text::before { content: 'Q. '; color: var(--gold); }
+    .faq-chevron { width: 20px; height: 20px; flex-shrink: 0; transition: transform 0.2s; color: var(--gray-400); }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-a { display: none; padding: 0 1.25rem 1.1rem; }
+    .faq-item.open .faq-a { display: block; }
+    .faq-a-text { font-size: 0.85rem; color: var(--text-light); line-height: 1.8; }
+    .faq-a-text::before { content: 'A. '; color: var(--bay-blue); font-weight: 700; }
+  </style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-grid"></div>
+  <div class="page-hero-inner">
+    <div class="breadcrumb"><a href="index.html">ホーム</a><span class="breadcrumb-sep">/</span><a href="faq.html">よくある質問</a></div>
+    <div class="page-label">FAQ</div>
+    <h1 class="page-title">よくある質問</h1>
+    <p class="page-subtitle">サービスに関するご不明点を解消します。解決しない場合は<a href="contact.html" style="color:var(--gold)">お問い合わせ</a>ください。</p>
+  </div>
+</section>
+
+<div class="faq-wrap">
+
+  <div class="faq-category">
+    <div class="faq-category-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      サービスについて
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q-btn"><span class="faq-q-text">豊洲に住んでいなくても使えますか？</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p class="faq-a-text">現在は豊洲・湾岸エリア（豊洲1〜6丁目、東雲周辺）の住民を主な対象として設計されています。近隣エリア（江東区全域・晴海・勝鬨）の方もご利用いただけますが、最も価値を発揮するのは豊洲在住の方です。将来的には勝鬨・月島・銀座エリアへの展開を予定しています。</p></div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q-btn"><span class="faq-q-text">AIの回答はどれくらい正確ですか？</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p class="faq-a-text">豊洲エリアの公開情報・不動産取引データ・教育情報・行政情報を学習した専用AIを採用しており、一般的なAIよりも豊洲特有の情報に強みを持ちます。ただし、医療・法律・金融に関する事項は専門家への相談を最終判断とすることを推奨します。また情報は定期的に更新されますが、最新性は保証できない場合があります。</p></div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q-btn"><span class="faq-q-text">スマートフォンでも使えますか？</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p class="faq-a-text">はい、完全レスポンシブデザインに対応しており、スマートフォン・タブレット・PCのすべてで快適にご利用いただけます。アプリのインストールは不要で、ブラウザからそのままアクセスできます。</p></div>
+    </div>
+  </div>
+
+  <div class="faq-category">
+    <div class="faq-category-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      料金・支払い
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q-btn"><span class="faq-q-text">無料トライアルはありますか？</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p class="faq-a-text">豊洲ライフナビは無料トライアルを設けておらず、初回から課金制です。これは「本気で豊洲生活を改善したい方だけ」にサービスを届けるためのポリシーです。ただし、いつでも即日解約が可能ですので、ご安心ください。</p></div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q-btn"><span class="faq-q-text">解約方法と返金について教えてください。</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p class="faq-a-text">マイページの「アカウント設定」からいつでも即日解約が可能です。解約後は当月末まで引き続きサービスをご利用いただけます。既にお支払いいただいた料金の返金は原則として対応しておりませんが、サービスに重大な問題が発生した場合はお問い合わせください。</p></div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q-btn"><span class="faq-q-text">支払い方法は何に対応していますか？</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p class="faq-a-text">Visa、Mastercard、American Express、JCBのクレジットカードに対応しています。決済にはStripeを使用しており、カード情報はStripeのサーバーに安全に保管されます。当サービスがカード情報を直接保持することはありません。</p></div>
+    </div>
+  </div>
+
+  <div class="faq-category">
+    <div class="faq-category-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      プライバシー・セキュリティ
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q-btn"><span class="faq-q-text">会話内容は他に共有されますか？</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p class="faq-a-text">いいえ。お客様とAIとの会話内容は、サービス改善目的の分析に使用することがありますが、個人を特定できる形で第三者に提供することは一切ありません。詳細は<a href="privacy.html" style="color:var(--bay-blue)">プライバシーポリシー</a>をご確認ください。</p></div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <button class="faq-q-btn"><span class="faq-q-text">マンション名・住所などの個人情報を入力しても安全ですか？</span><svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p class="faq-a-text">通信はすべてSSL/TLS暗号化により保護されています。マンション名や居住階数などの情報は、AIがよりパーソナライズされたアドバイスを提供するために使用しますが、他のユーザーに公開されることはありません。</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div id="footer-placeholder"></div>
+<script src="shared-components.js"></script>
+<script>
+function toggleFaq(item) {
+  item.classList.toggle('open');
+}
+</script>
+</body>
+</html>

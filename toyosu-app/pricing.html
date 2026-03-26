@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>料金プラン｜豊洲ライフナビ — スタンダード2,980円・プレミアム4,980円</title>
+  <meta name="description" content="豊洲ライフナビの料金プラン。スタンダード月額2,980円・プレミアム月額4,980円（税込）。初回から課金制。いつでも解約可能。Stripe安全決済対応。">
+  <meta name="keywords" content="豊洲ライフナビ 料金,豊洲 AI サービス 月額,豊洲 タワマン 情報 サービス 価格">
+  <link rel="canonical" href="https://toyosu-lifenavi.jp/pricing.html">
+  <meta property="og:title" content="料金プラン｜豊洲ライフナビ">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    body { padding-top: 64px; background: var(--gray-50); }
+    .pricing-wrap { max-width: 860px; margin: 0 auto; padding: 4rem 2rem; }
+    .pricing-intro { text-align: center; margin-bottom: 3rem; }
+    .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2.5rem; }
+    .pricing-card {
+      background: white; border: 2px solid var(--gray-200); border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem; position: relative;
+    }
+    .pricing-card.featured { border-color: var(--gold); background: linear-gradient(160deg, rgba(201,168,76,0.04), white); }
+    .pricing-badge {
+      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+      background: var(--gold); color: var(--navy); font-size: 0.68rem; font-weight: 700;
+      padding: 4px 16px; border-radius: 2px; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap;
+    }
+    .plan-name { font-family: 'Shippori Mincho', serif; font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .plan-tagline { font-size: 0.8rem; color: var(--text-light); margin-bottom: 1.5rem; }
+    .plan-price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 4px; }
+    .plan-yen { font-family: 'Shippori Mincho', serif; font-size: 2.6rem; font-weight: 700; color: var(--navy); }
+    .plan-period { font-size: 0.8rem; color: var(--text-light); }
+    .plan-tax { font-size: 0.72rem; color: var(--text-light); margin-bottom: 1.75rem; }
+    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 2rem; }
+    .plan-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem; color: var(--text-light); }
+    .pf-check { color: var(--gold); flex-shrink: 0; margin-top: 2px; }
+    .pf-text { line-height: 1.5; }
+    .plan-btn {
+      width: 100%; padding: 14px; font-family: 'Noto Sans JP', sans-serif; font-weight: 700; font-size: 0.9rem;
+      border-radius: var(--radius); cursor: pointer; transition: all 0.2s; letter-spacing: 0.03em; border: 2px solid var(--navy); background: transparent; color: var(--navy);
+    }
+    .plan-btn:hover { background: var(--navy); color: white; }
+    .plan-btn.gold-btn { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+    .plan-btn.gold-btn:hover { background: var(--gold-light); border-color: var(--gold-light); }
+    .faq-note { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 1.5rem 2rem; }
+    .faq-note h3 { font-family: 'Shippori Mincho', serif; font-size: 1rem; color: var(--navy); margin-bottom: 1rem; }
+    .faq-note-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .fn-item { font-size: 0.83rem; color: var(--text-light); line-height: 1.7; }
+    .fn-q { font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+    .guarantee-band { background: var(--navy); color: white; text-align: center; padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 2rem; }
+    .guarantee-title { font-family: 'Shippori Mincho', serif; font-size: 1.1rem; color: var(--gold); margin-bottom: 0.5rem; }
+    .guarantee-text { font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.7; }
+    @media (max-width: 700px) { .pricing-grid { grid-template-columns: 1fr; } .faq-note-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-grid"></div>
+  <div class="page-hero-inner">
+    <div class="breadcrumb"><a href="index.html">ホーム</a><span class="breadcrumb-sep">/</span><a href="pricing.html">料金プラン</a></div>
+    <div class="page-label">料金プラン</div>
+    <h1 class="page-title">シンプルな2プラン<br>初回から本気でスタート</h1>
+    <p class="page-subtitle">無料期間なし・無料お試しなし。本気で豊洲生活を改善したい方だけに届けるサービスです。いつでも解約可能です。</p>
+  </div>
+</section>
+
+<div class="pricing-wrap">
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="plan-name">スタンダード</div>
+      <div class="plan-tagline">DINKSや個人向けの基本プラン</div>
+      <div class="plan-price"><div class="plan-yen">2,980</div><div class="plan-period">円 / 月</div></div>
+      <div class="plan-tax">税込</div>
+      <ul class="plan-features">
+        <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">AIチャット（月100回）</span></li>
+        <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">防災プランナー（基本版）</span></li>
+        <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">資産価値情報（エリアデータ）</span></li>
+        <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">医療機関データベース</span></li>
+        <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">行政・生活情報</span></li>
+        <li><span class="pf-check" style="color:var(--gray-400)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span><span class="pf-text" style="color:var(--gray-400)">中学受験AIアドバイザー（対象外）</span></li>
+        <li><span class="pf-check" style="color:var(--gray-400)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span><span class="pf-text" style="color:var(--gray-400)">資産価値シミュレーター詳細版（対象外）</span></li>
+      </ul>
+      <button class="plan-btn" onclick="location.href='index.html#hero'">スタンダードで始める</button>
+    </div>
+    <div class="pricing-card featured">
+      <div class="pricing-badge">最も選ばれています</div>
+      <div class="plan-name">プレミアム</div>
+      <div class="plan-tagline">ファミリー・中学受験世帯に最適</div>
+      <div class="plan-price"><div class="plan-yen">4,980</div><div class="plan-period">円 / 月</div></div>
+      <div class="plan-tax">税込</div>
+      <ul class="plan-features">
+        <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">AIチャット（<strong>無制限</strong>）</span></li>
+        <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">防災プランナー（個別プラン生成）</span></li>
+        <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">資産価値情報（全機能）</span></li>
+        <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">医療機関データベース（優先情報付き）</span></li>
+        <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">行政・生活情報（申請サポート付き）</span></li>
+        <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text"><strong>中学受験AIアドバイザー（フル機能）</strong></span></li>
+        <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text"><strong>資産価値シミュレーター詳細版</strong></span></li>
+      </ul>
+      <button class="plan-btn gold-btn" onclick="location.href='index.html#hero'">プレミアムで始める</button>
+    </div>
+  </div>
+
+  <div class="guarantee-band">
+    <div class="guarantee-title">いつでも即日解約可能</div>
+    <p class="guarantee-text">契約期間の縛りは一切ありません。マイページからいつでも即日解約でき、翌月からの課金が停止します。違約金・解約手数料もかかりません。</p>
+  </div>
+
+  <div class="faq-note">
+    <h3>料金に関するよくある質問</h3>
+    <div class="faq-note-grid">
+      <div class="fn-item"><div class="fn-q">支払い方法は？</div>Visa・Mastercard・American Express・JCBのクレジットカードに対応。Stripe安全決済を採用しています。</div>
+      <div class="fn-item"><div class="fn-q">請求のタイミングは？</div>登録日に初月分を即時課金。以降は同日に毎月自動更新されます。</div>
+      <div class="fn-item"><div class="fn-q">プランの変更は可能ですか？</div>マイページからいつでもプランのアップグレード・ダウングレードが可能です。変更は翌月から反映。</div>
+      <div class="fn-item"><div class="fn-q">領収書・インボイスの発行は？</div>StripeのポータルからPDF形式の領収書をダウンロードできます。インボイス対応済みです。</div>
+    </div>
+  </div>
+</div>
+
+<div id="footer-placeholder"></div>
+<script src="shared-components.js"></script>
+</body>
+</html>

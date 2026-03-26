@@ -1,0 +1,2271 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="豊洲ライフナビ｜豊洲・湾岸タワマン住民専用の中学受験・防災・資産価値・子育て情報AIサービス。月額2,980円で豊洲の暮らしをトータルサポート。">
+  <meta name="keywords" content="豊洲,タワマン,中学受験,防災,子育て,湾岸,豊洲駅,江東区,資産価値,ライフサポート">
+  <meta property="og:title" content="豊洲ライフナビ｜豊洲タワマン住民専用AIサービス">
+  <meta property="og:description" content="中学受験・防災・資産価値・医療・子育て。豊洲に住む人の悩みを、AIが全力でサポートします。">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ja_JP">
+  <title>豊洲ライフナビ｜豊洲タワマン住民専用AIサービス</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;700&family=Shippori+Mincho:wght@400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    :root {
+      --navy: #0f1e38;
+      --navy-light: #1a3055;
+      --bay-blue: #1e4d8c;
+      --sky: #4a9eca;
+      --gold: #c9a84c;
+      --gold-light: #e8c875;
+      --cream: #f5f0e8;
+      --white: #ffffff;
+      --gray-50: #f9f8f6;
+      --gray-100: #f0ede8;
+      --gray-200: #e2ddd6;
+      --gray-400: #9a9490;
+      --gray-600: #6b6560;
+      --gray-800: #2d2a26;
+      --text: #1a1714;
+      --text-light: #6b6560;
+      --border: rgba(201,168,76,0.25);
+      --shadow-soft: 0 4px 24px rgba(15,30,56,0.08);
+      --shadow-mid: 0 8px 40px rgba(15,30,56,0.14);
+      --shadow-deep: 0 20px 60px rgba(15,30,56,0.22);
+      --radius: 4px;
+      --radius-lg: 8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      color: var(--text);
+      background: var(--cream);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ===== NAVIGATION ===== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(15,30,56,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,168,76,0.2);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+    .nav-title span { color: var(--gold); }
+    .nav-links {
+      display: flex; align-items: center; gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      background: var(--gold) !important;
+      color: var(--navy) !important;
+      padding: 8px 20px !important;
+      border-radius: var(--radius) !important;
+      font-weight: 700 !important;
+      font-size: 0.82rem !important;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, transform 0.1s !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; transform: translateY(-1px); }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; color: white; }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+      display: flex; align-items: center;
+      padding-top: 64px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(74,158,202,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 80% at 20% 80%, rgba(201,168,76,0.07) 0%, transparent 50%),
+        linear-gradient(180deg, #0f1e38 0%, #0a1628 100%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; opacity: 0.04;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.8) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.8) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-skyline {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 200px;
+      opacity: 0.06;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      max-width: 1100px; margin: 0 auto;
+      padding: 5rem 2rem;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(201,168,76,0.15);
+      border: 1px solid rgba(201,168,76,0.35);
+      color: var(--gold-light);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      padding: 6px 14px;
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+    .hero-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.4;
+      letter-spacing: 0.02em;
+      margin-bottom: 1.25rem;
+    }
+    .hero-title .accent { color: var(--gold); display: block; }
+    .hero-subtitle {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+    .hero-pain-list {
+      list-style: none;
+      margin-bottom: 2.5rem;
+    }
+    .hero-pain-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      color: rgba(255,255,255,0.75);
+      font-size: 0.9rem;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .hero-pain-list li:last-child { border-bottom: none; }
+    .hero-pain-list .check {
+      width: 18px; height: 18px;
+      background: rgba(201,168,76,0.2);
+      border: 1px solid var(--gold);
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--gold);
+      color: var(--navy);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 14px 28px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      border: none; cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.03em;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.3); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent;
+      color: rgba(255,255,255,0.7);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.9rem;
+      padding: 14px 20px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.5); color: white; }
+
+    /* Hero Card */
+    .hero-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+    }
+    .hero-card-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1rem;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(201,168,76,0.2);
+    }
+    .plan-cards { display: flex; flex-direction: column; gap: 0.75rem; }
+    .plan-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .plan-card:hover, .plan-card.active {
+      border-color: rgba(201,168,76,0.5);
+      background: rgba(201,168,76,0.08);
+    }
+    .plan-card.active .plan-radio { background: var(--gold); }
+    .plan-name {
+      font-size: 0.9rem; font-weight: 500; color: white;
+      margin-bottom: 2px;
+    }
+    .plan-desc { font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+    .plan-price { text-align: right; }
+    .plan-amount {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.2rem; font-weight: 700;
+      color: var(--gold-light);
+    }
+    .plan-period { font-size: 0.7rem; color: rgba(255,255,255,0.4); }
+    .plan-radio {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(201,168,76,0.5);
+      border-radius: 50%;
+      transition: background 0.2s;
+      margin-left: 12px;
+    }
+    .hero-card-cta {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 14px;
+      font-size: 0.95rem;
+    }
+    .hero-card-note {
+      text-align: center;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.35);
+      margin-top: 0.75rem;
+    }
+    .hero-stats {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem; margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(201,168,76,0.15);
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--gold);
+      display: block;
+    }
+    .stat-label { font-size: 0.68rem; color: rgba(255,255,255,0.4); }
+
+    /* ===== SECTION COMMONS ===== */
+    section { padding: 5rem 0; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+    .section-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.4;
+      margin-bottom: 0.75rem;
+    }
+    .section-subtitle {
+      font-size: 1rem;
+      color: var(--text-light);
+      max-width: 560px;
+      line-height: 1.8;
+    }
+
+    /* ===== PAIN SECTION ===== */
+    .pain-section { background: var(--white); }
+    .pain-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: var(--gray-200);
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-top: 3rem;
+    }
+    .pain-card {
+      background: var(--white);
+      padding: 2rem 1.75rem;
+      position: relative;
+      transition: background 0.2s;
+    }
+    .pain-card:hover { background: var(--gray-50); }
+    .pain-icon {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, rgba(15,30,56,0.08), rgba(15,30,56,0.04));
+      border: 1px solid rgba(15,30,56,0.1);
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.25rem;
+      color: var(--navy);
+    }
+    .pain-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+    .pain-text { font-size: 0.85rem; color: var(--text-light); line-height: 1.7; }
+    .pain-quote {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      background: rgba(201,168,76,0.07);
+      border-left: 3px solid var(--gold);
+      font-size: 0.78rem;
+      color: var(--gray-600);
+      font-style: italic;
+      line-height: 1.6;
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    /* ===== FEATURES ===== */
+    .features-section { background: var(--gray-50); }
+    .features-header { text-align: center; margin-bottom: 3.5rem; }
+    .features-header .section-subtitle { margin: 0 auto; text-align: center; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+    .feature-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .feature-card:hover { box-shadow: var(--shadow-mid); transform: translateY(-3px); }
+    .feature-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--navy), var(--bay-blue));
+    }
+    .feature-card.gold::before { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+    .feature-num {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 2.5rem; font-weight: 700;
+      color: rgba(15,30,56,0.07);
+      position: absolute; top: 1rem; right: 1.5rem;
+      line-height: 1;
+    }
+    .feature-icon {
+      width: 48px; height: 48px;
+      background: rgba(15,30,56,0.05);
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--navy);
+      margin-bottom: 1.25rem;
+    }
+    .feature-card.gold .feature-icon {
+      background: rgba(201,168,76,0.1);
+      color: var(--gold);
+    }
+    .feature-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+    .feature-text { font-size: 0.875rem; color: var(--text-light); line-height: 1.75; }
+    .feature-tags {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-top: 1.25rem;
+    }
+    .tag {
+      font-size: 0.7rem;
+      padding: 3px 10px;
+      background: rgba(15,30,56,0.05);
+      color: var(--navy);
+      border-radius: 2px;
+      font-weight: 500;
+    }
+    .tag.gold-tag { background: rgba(201,168,76,0.1); color: #7a5e1a; }
+
+    /* ===== AI DEMO SECTION ===== */
+    .ai-demo-section { background: var(--navy); }
+    .ai-demo-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center;
+    }
+    .ai-demo-text .section-title { color: var(--white); }
+    .ai-demo-text .section-subtitle { color: rgba(255,255,255,0.6); }
+    .ai-demo-items { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+    .ai-demo-item {
+      display: flex; gap: 1rem; align-items: flex-start;
+    }
+    .ai-demo-icon {
+      width: 36px; height: 36px;
+      background: rgba(201,168,76,0.15);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+    .ai-demo-item-text { font-size: 0.875rem; color: rgba(255,255,255,0.65); line-height: 1.7; }
+    .ai-demo-item-title { font-size: 0.9rem; font-weight: 600; color: var(--white); margin-bottom: 2px; }
+
+    /* Chat mockup */
+    .chat-mockup {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .chat-header {
+      background: rgba(201,168,76,0.1);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      padding: 1rem 1.25rem;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .chat-avatar {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--navy);
+      font-size: 0.7rem; font-weight: 700;
+    }
+    .chat-name { font-size: 0.85rem; font-weight: 600; color: var(--white); }
+    .chat-status { font-size: 0.7rem; color: rgba(255,255,255,0.4); }
+    .chat-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
+    .msg { max-width: 85%; }
+    .msg-user { margin-left: auto; }
+    .msg-bubble {
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      font-size: 0.82rem;
+      line-height: 1.6;
+    }
+    .msg-user .msg-bubble {
+      background: rgba(201,168,76,0.15);
+      border: 1px solid rgba(201,168,76,0.25);
+      color: rgba(255,255,255,0.85);
+      border-radius: 12px 12px 2px 12px;
+    }
+    .msg-ai .msg-bubble {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.8);
+      border-radius: 12px 12px 12px 2px;
+    }
+    .msg-time { font-size: 0.65rem; color: rgba(255,255,255,0.3); margin-top: 4px; text-align: right; }
+    .msg-ai .msg-time { text-align: left; }
+    .typing {
+      display: flex; gap: 4px; padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px 12px 12px 2px;
+      width: fit-content;
+    }
+    .typing span {
+      width: 6px; height: 6px;
+      background: rgba(255,255,255,0.4);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); }
+    }
+
+    /* ===== PRICING ===== */
+    .pricing-section { background: var(--white); }
+    .pricing-header { text-align: center; margin-bottom: 3.5rem; }
+    .pricing-header .section-subtitle { margin: 0 auto; text-align: center; }
+    .pricing-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2rem; max-width: 720px; margin: 0 auto;
+    }
+    .pricing-card {
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      position: relative;
+      background: var(--white);
+      transition: box-shadow 0.2s;
+    }
+    .pricing-card:hover { box-shadow: var(--shadow-mid); }
+    .pricing-card.featured {
+      border-color: var(--gold);
+      background: linear-gradient(160deg, rgba(201,168,76,0.04), white);
+    }
+    .pricing-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 2px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .pricing-plan-name {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.25rem;
+    }
+    .pricing-plan-desc { font-size: 0.8rem; color: var(--text-light); margin-bottom: 1.5rem; }
+    .pricing-amount {
+      display: flex; align-items: baseline; gap: 4px;
+      margin-bottom: 0.25rem;
+    }
+    .pricing-yen {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 2.4rem; font-weight: 700;
+      color: var(--navy);
+    }
+    .pricing-period { font-size: 0.8rem; color: var(--text-light); }
+    .pricing-tax { font-size: 0.72rem; color: var(--text-light); margin-bottom: 1.75rem; }
+    .pricing-features { list-style: none; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .pricing-features li {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 0.85rem; color: var(--text-light);
+    }
+    .pricing-features .pf-check {
+      color: var(--gold);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .pricing-features .pf-text { line-height: 1.5; }
+    .btn-pricing {
+      width: 100%;
+      padding: 13px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid var(--navy);
+      background: transparent;
+      color: var(--navy);
+      letter-spacing: 0.03em;
+    }
+    .btn-pricing:hover { background: var(--navy); color: white; }
+    .btn-pricing.featured-btn {
+      background: var(--gold); color: var(--navy); border-color: var(--gold);
+    }
+    .btn-pricing.featured-btn:hover { background: var(--gold-light); border-color: var(--gold-light); }
+
+    /* ===== SEO CONTENT ===== */
+    .seo-section { background: var(--gray-50); }
+    .seo-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem; margin-top: 2.5rem;
+    }
+    .seo-block h3 {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.1rem; color: var(--navy);
+      margin-bottom: 1rem;
+    }
+    .seo-block p { font-size: 0.875rem; color: var(--text-light); line-height: 1.8; margin-bottom: 0.75rem; }
+    .seo-block a { color: var(--bay-blue); text-decoration: none; }
+    .seo-block a:hover { text-decoration: underline; }
+    .area-links {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    .area-link {
+      font-size: 0.78rem;
+      padding: 5px 12px;
+      background: rgba(15,30,56,0.06);
+      color: var(--navy);
+      border-radius: 2px;
+      text-decoration: none;
+      border: 1px solid rgba(15,30,56,0.1);
+      transition: background 0.15s;
+    }
+    .area-link:hover { background: rgba(15,30,56,0.12); }
+
+    /* ===== TESTIMONIALS ===== */
+    .testimonials-section { background: var(--white); }
+    .testimonials-header { text-align: center; margin-bottom: 3rem; }
+    .testimonials-header .section-subtitle { margin: 0 auto; text-align: center; }
+    .testimonials-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .testimonial-card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+    }
+    .testimonial-stars {
+      color: var(--gold);
+      font-size: 0.85rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: 2px;
+    }
+    .testimonial-text {
+      font-size: 0.85rem; color: var(--text);
+      line-height: 1.75; margin-bottom: 1.25rem;
+    }
+    .testimonial-author {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .testimonial-avatar {
+      width: 36px; height: 36px;
+      background: var(--navy);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 0.8rem; font-weight: 700;
+    }
+    .testimonial-name { font-size: 0.82rem; font-weight: 600; color: var(--navy); }
+    .testimonial-role { font-size: 0.72rem; color: var(--text-light); }
+
+    /* ===== FAQ ===== */
+    .faq-section { background: var(--gray-50); }
+    .faq-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem; margin-top: 2.5rem;
+    }
+    .faq-item {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    .faq-q {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.92rem; font-weight: 700;
+      color: var(--navy); margin-bottom: 0.5rem;
+    }
+    .faq-q::before { content: 'Q. '; color: var(--gold); }
+    .faq-a { font-size: 0.83rem; color: var(--text-light); line-height: 1.75; }
+    .faq-a::before { content: 'A. '; color: var(--bay-blue); font-weight: 600; }
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      background: var(--navy);
+      text-align: center;
+      padding: 6rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(201,168,76,0.08) 0%, transparent 70%);
+    }
+    .cta-inner { position: relative; z-index: 1; }
+    .cta-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    .cta-subtitle { font-size: 1rem; color: rgba(255,255,255,0.6); margin-bottom: 2.5rem; }
+    .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #080f1e;
+      color: rgba(255,255,255,0.5);
+      padding: 3rem 0 2rem;
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 2rem;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 2rem; margin-bottom: 2.5rem;
+    }
+    .footer-brand-name {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1rem; color: white; font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .footer-brand-desc { font-size: 0.78rem; line-height: 1.7; }
+    .footer-col-title {
+      font-size: 0.75rem; text-transform: uppercase;
+      letter-spacing: 0.1em; color: rgba(255,255,255,0.6);
+      font-weight: 600; margin-bottom: 1rem;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer-links a { color: rgba(255,255,255,0.45); text-decoration: none; font-size: 0.8rem; transition: color 0.15s; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-copy { font-size: 0.75rem; }
+    .footer-legal { display: flex; gap: 1.5rem; }
+    .footer-legal a { font-size: 0.75rem; color: rgba(255,255,255,0.35); text-decoration: none; }
+    .footer-legal a:hover { color: rgba(255,255,255,0.7); }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center;
+      padding: 2rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white;
+      border-radius: var(--radius-lg);
+      width: 100%; max-width: 480px;
+      overflow: hidden;
+      box-shadow: var(--shadow-deep);
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .modal-header {
+      background: var(--navy);
+      padding: 1.5rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .modal-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1rem; font-weight: 700;
+      color: white;
+    }
+    .modal-close {
+      background: none; border: none; cursor: pointer;
+      color: rgba(255,255,255,0.5); width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 4px; transition: background 0.15s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.1); color: white; }
+    .modal-body { padding: 2rem; }
+    .modal-plan-display {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 1.5rem;
+    }
+    .modal-plan-name { font-size: 0.85rem; font-weight: 600; color: var(--navy); }
+    .modal-plan-price { font-family: 'Shippori Mincho', serif; font-size: 1.1rem; font-weight: 700; color: var(--navy); }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--navy); margin-bottom: 0.4rem; }
+    .form-input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      background: white;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-input:focus { border-color: var(--navy); }
+    .form-input::placeholder { color: var(--gray-400); font-size: 0.85rem; }
+    #card-element {
+      padding: 11px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      background: white;
+    }
+    .submit-btn {
+      width: 100%; padding: 14px;
+      background: var(--gold);
+      color: var(--navy);
+      border: none; border-radius: var(--radius);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700; font-size: 0.95rem;
+      cursor: pointer; letter-spacing: 0.03em;
+      transition: all 0.2s;
+      margin-top: 0.75rem;
+    }
+    .submit-btn:hover { background: var(--gold-light); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .modal-security {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--text-light);
+      margin-top: 0.75rem;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .tab-group {
+      display: flex; gap: 0; margin-bottom: 1.5rem;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .tab-btn {
+      flex: 1; padding: 10px;
+      background: none; border: none; cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.82rem; font-weight: 500;
+      color: var(--text-light);
+      transition: background 0.15s, color 0.15s;
+    }
+    .tab-btn.active { background: var(--navy); color: white; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+    .error-msg { color: #c0392b; font-size: 0.78rem; margin-top: 6px; display: none; }
+    .success-state { text-align: center; padding: 2rem 0; }
+    .success-icon {
+      width: 60px; height: 60px;
+      background: rgba(201,168,76,0.1);
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.25rem;
+      color: var(--gold);
+    }
+    .success-title { font-family: 'Shippori Mincho', serif; font-size: 1.2rem; font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; }
+    .success-text { font-size: 0.85rem; color: var(--text-light); line-height: 1.7; margin-bottom: 1.5rem; }
+
+    /* ===== APP SECTION ===== */
+    .app-section {
+      display: none;
+      min-height: 100vh;
+      background: var(--gray-50);
+    }
+    .app-section.visible { display: block; }
+    .app-layout { display: flex; min-height: calc(100vh - 64px); }
+    .sidebar {
+      width: 260px; flex-shrink: 0;
+      background: var(--navy);
+      padding: 1.5rem;
+      position: sticky; top: 64px;
+      height: calc(100vh - 64px);
+      overflow-y: auto;
+    }
+    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .sidebar-item a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      font-size: 0.85rem;
+      border-radius: var(--radius);
+      transition: all 0.15s;
+    }
+    .sidebar-item a:hover, .sidebar-item.active a {
+      background: rgba(255,255,255,0.08);
+      color: white;
+    }
+    .sidebar-item.active a { color: var(--gold); background: rgba(201,168,76,0.1); }
+    .sidebar-label {
+      font-size: 0.65rem; text-transform: uppercase;
+      letter-spacing: 0.12em; color: rgba(255,255,255,0.3);
+      font-weight: 600; padding: 12px 12px 4px;
+      margin-top: 8px;
+    }
+    .app-main { flex: 1; padding: 2rem; overflow-y: auto; }
+    .app-page { display: none; }
+    .app-page.active { display: block; }
+    .app-greeting {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--navy); margin-bottom: 0.25rem;
+    }
+    .app-greeting-sub { font-size: 0.875rem; color: var(--text-light); margin-bottom: 2rem; }
+    .dashboard-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem; margin-bottom: 2rem;
+    }
+    .dash-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+    }
+    .dash-card-icon {
+      width: 40px; height: 40px;
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .dash-card-label { font-size: 0.75rem; color: var(--text-light); margin-bottom: 4px; }
+    .dash-card-value { font-family: 'Shippori Mincho', serif; font-size: 1.5rem; font-weight: 700; color: var(--navy); }
+    .app-chat-wrap {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      height: 520px;
+    }
+    .app-chat-header {
+      background: var(--navy);
+      padding: 1rem 1.25rem;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .app-chat-title { font-size: 0.9rem; font-weight: 600; color: white; }
+    .app-chat-status { font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-left: auto; }
+    .online-dot {
+      width: 8px; height: 8px;
+      background: #2ecc71; border-radius: 50%;
+      display: inline-block; margin-right: 4px;
+    }
+    .app-chat-messages { flex: 1; overflow-y: auto; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
+    .app-msg { max-width: 80%; }
+    .app-msg.user { margin-left: auto; }
+    .app-msg-bubble {
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem; line-height: 1.65;
+      border-radius: 12px;
+    }
+    .app-msg.user .app-msg-bubble {
+      background: var(--navy); color: white;
+      border-radius: 12px 12px 2px 12px;
+    }
+    .app-msg.ai .app-msg-bubble {
+      background: var(--gray-50); color: var(--text);
+      border: 1px solid var(--gray-200);
+      border-radius: 12px 12px 12px 2px;
+    }
+    .app-chat-input {
+      border-top: 1px solid var(--gray-200);
+      padding: 1rem;
+      display: flex; gap: 0.75rem;
+    }
+    .app-input {
+      flex: 1; padding: 10px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.875rem;
+      outline: none; transition: border-color 0.2s;
+      resize: none;
+    }
+    .app-input:focus { border-color: var(--navy); }
+    .app-send {
+      width: 42px; height: 42px;
+      background: var(--navy); color: white;
+      border: none; border-radius: var(--radius);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: background 0.15s;
+    }
+    .app-send:hover { background: var(--bay-blue); }
+    .quick-topics {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 1.25rem;
+    }
+    .quick-topic {
+      font-size: 0.78rem; padding: 6px 12px;
+      background: white; border: 1px solid var(--gray-200);
+      color: var(--navy); border-radius: 2px;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .quick-topic:hover { border-color: var(--navy); background: var(--navy); color: white; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .hero-content { grid-template-columns: 1fr; gap: 3rem; }
+      .pain-grid { grid-template-columns: 1fr 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .ai-demo-inner { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .faq-grid { grid-template-columns: 1fr; }
+      .seo-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .dashboard-grid { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; align-items: center; }
+    }
+    @media (max-width: 600px) {
+      .pain-grid { grid-template-columns: 1fr; }
+      .hero-stats { grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .app-main { padding: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav id="main-nav">
+  <a href="#" class="nav-brand" onclick="showLanding()">
+    <div class="nav-logo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0f1e38" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </div>
+    <span class="nav-title">豊洲<span>ライフナビ</span></span>
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#pain">解決する悩み</a></li>
+    <li><a href="#features">機能</a></li>
+    <li><a href="#pricing">料金</a></li>
+    <li><a href="#faq">よくある質問</a></li>
+    <li><a href="#" class="nav-cta" onclick="openModal('standard')">今すぐ始める</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" id="hamburger">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<!-- LANDING PAGE -->
+<div id="landing-page">
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          豊洲・湾岸タワマン住民専用 — 2026年最新版
+        </div>
+        <h1 class="hero-title">
+          豊洲に住む人の
+          <span class="accent">不安と悩みを</span>
+          全部、解決する。
+        </h1>
+        <p class="hero-subtitle">
+          中学受験・防災・タワマン資産価値・子育て・医療……<br>
+          豊洲タワマン生活のリアルな課題に、AIが24時間で答えます。
+        </p>
+        <ul class="hero-pain-list">
+          <li>
+            <span class="check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+            SAPIX・日能研の豊洲エリア最新情報と中学受験戦略
+          </li>
+          <li>
+            <span class="check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+            首都直下地震・液状化リスクと豊洲タワマン防災ガイド
+          </li>
+          <li>
+            <span class="check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+            マンション管理費・修繕積立金・資産価値シミュレーション
+          </li>
+          <li>
+            <span class="check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+            豊洲エリアのクリニック・医療機関データベース
+          </li>
+        </ul>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="openModal('premium')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            プレミアムで始める
+          </button>
+          <a href="#pain" class="btn-ghost">
+            詳しく見る
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-card">
+          <div class="hero-card-title">プランを選んで今すぐ開始</div>
+          <div class="plan-cards">
+            <div class="plan-card" id="plan-standard" onclick="selectPlan('standard')">
+              <div>
+                <div class="plan-name">スタンダード</div>
+                <div class="plan-desc">個人・DINKSに最適</div>
+              </div>
+              <div style="display:flex;align-items:center">
+                <div class="plan-price">
+                  <div class="plan-amount">2,980円</div>
+                  <div class="plan-period">/ 月（税込）</div>
+                </div>
+                <div class="plan-radio" id="radio-standard"></div>
+              </div>
+            </div>
+            <div class="plan-card active" id="plan-premium" onclick="selectPlan('premium')">
+              <div>
+                <div class="plan-name">プレミアム <span style="font-size:0.7rem;background:rgba(201,168,76,0.3);color:#c9a84c;padding:2px 6px;border-radius:2px;margin-left:4px">人気</span></div>
+                <div class="plan-desc">ファミリー・中学受験世帯に</div>
+              </div>
+              <div style="display:flex;align-items:center">
+                <div class="plan-price">
+                  <div class="plan-amount">4,980円</div>
+                  <div class="plan-period">/ 月（税込）</div>
+                </div>
+                <div class="plan-radio" id="radio-premium" style="background:var(--gold)"></div>
+              </div>
+            </div>
+          </div>
+          <button class="btn-primary hero-card-cta" id="hero-cta-btn" onclick="openModal(selectedPlan)">
+            選択したプランで登録する
+          </button>
+          <p class="hero-card-note">クレジットカード決済 / Stripe安全決済 / いつでも解約可能</p>
+          <div class="hero-stats">
+            <div class="stat"><span class="stat-num">340+</span><span class="stat-label">豊洲住民利用中</span></div>
+            <div class="stat"><span class="stat-num">4.8</span><span class="stat-label">満足度</span></div>
+            <div class="stat"><span class="stat-num">24h</span><span class="stat-label">AIサポート</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAIN SECTION -->
+  <section class="pain-section" id="pain">
+    <div class="container">
+      <div class="section-label">解決する悩み</div>
+      <h2 class="section-title">豊洲タワマン住民の<br>リアルな悩み・不安</h2>
+      <p class="section-subtitle">世帯年収1,200万〜2,000万円、タワマン在住、30〜45歳のファミリー・DINKSが抱える課題を徹底的に解決します。</p>
+      <div class="pain-grid">
+        <div class="pain-card">
+          <div class="pain-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.4 11.7a19.82 19.82 0 01-3.07-8.67A2 2 0 013.34 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.91 8.96a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+          <div class="pain-title">中学受験の重圧と情報格差</div>
+          <div class="pain-text">豊洲タワマンは中学受験率が都内でもトップクラス。SAPIXや日能研の豊洲エリア情報、中国系家庭との競争激化で焦りを感じる親が急増しています。</div>
+          <div class="pain-quote">「塾に行きたくないと子供が言い始めて……1年後が受験本番なのに」（40代女性・豊洲在住）</div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div class="pain-title">地震・液状化・防災への不安</div>
+          <div class="pain-text">埋立地特有の液状化リスク、タワマンでのエレベーター停止、帰宅困難者問題。東日本大震災では40階超を徒歩で上ることになった住民も実在します。</div>
+          <div class="pain-quote">「頭のどこかで常に地震を警戒している」（豊洲在住・30代男性）</div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+          <div class="pain-title">タワマン資産価値・維持費の不安</div>
+          <div class="pain-text">2025年豊洲坪単価663万円。資産は上がっているが管理費・修繕積立金の高騰と売り時の判断が悩みの種。有楽町線延伸後の相場変動も気になる。</div>
+          <div class="pain-quote">「維持費が毎年上がっていて、売り時をいつ判断すればいいか…」（40代会社員）</div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <div class="pain-title">子育てコミュニティの閉塞感</div>
+          <div class="pain-text">マンションブランド格差、部屋の広さや階数による住民間の微妙な序列感。ママ友グループへの参入障壁と孤立感を抱えながら子育てをする世帯が多数います。</div>
+          <div class="pain-quote">「集団でリーダーシップを取れる性格でないと住みにくい面がある」（住民口コミ）</div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+          <div class="pain-title">医療機関不足と健康管理</div>
+          <div class="pain-text">再開発で人口が急増したにもかかわらず、地域の医師・クリニックの数が追いついていない。江東区パブリックコメントでも「医療体制強化」の声が多数。</div>
+          <div class="pain-quote">「保育園も入りにくい。行政サービスも大してよくない」（5年在住の住民）</div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+          <div class="pain-title">生活・行政手続きの煩雑さ</div>
+          <div class="pain-text">保育園申請・学校選択・区内の交通アクセスの悪さ・行政サービスの質。タワマン住民が多い豊洲特有の行政窓口の混雑と、手続き情報の分かりにくさが課題です。</div>
+          <div class="pain-quote">「江東区内のアクセスはかなり悪い。行政サービスも大してよくない」（住民）</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features-section" id="features">
+    <div class="container">
+      <div class="features-header">
+        <div class="section-label">サービス機能</div>
+        <h2 class="section-title">豊洲住民のために<br>設計された6つの機能</h2>
+        <p class="section-subtitle">単なる情報サービスではありません。AIが豊洲エリアの最新データを学習し、あなた専用のアドバイスを提供します。</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-num">01</div>
+          <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
+          <h3 class="feature-title">中学受験AIアドバイザー</h3>
+          <p class="feature-text">豊洲・湾岸エリアの塾情報（SAPIX豊洲・日能研・早稲アカ）、志望校別の合格戦略、スケジュール管理、親のメンタルサポートまで一括提供。2026年最新の受験動向に対応。</p>
+          <div class="feature-tags">
+            <span class="tag">SAPIX対策</span>
+            <span class="tag">志望校分析</span>
+            <span class="tag">スケジュール</span>
+            <span class="tag">親向けアドバイス</span>
+          </div>
+        </div>
+        <div class="feature-card gold">
+          <div class="feature-num">02</div>
+          <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <h3 class="feature-title">防災・震災対策プランナー</h3>
+          <p class="feature-text">豊洲の液状化リスクマップ、タワマン別の防災設備チェック、家族構成別の備蓄リスト自動生成、帰宅困難時のシミュレーション。江東区ハザードマップ完全対応。</p>
+          <div class="feature-tags">
+            <span class="tag gold-tag">液状化リスク</span>
+            <span class="tag gold-tag">備蓄リスト生成</span>
+            <span class="tag gold-tag">タワマン防災</span>
+            <span class="tag gold-tag">避難シミュレーション</span>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-num">03</div>
+          <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+          <h3 class="feature-title">不動産資産価値シミュレーター</h3>
+          <p class="feature-text">豊洲エリアの坪単価推移、有楽町線延伸（2030年代）後の相場予測、管理費・修繕積立金の長期シミュレーション、売却タイミング診断。あなたのマンションの将来価値を試算。</p>
+          <div class="feature-tags">
+            <span class="tag">坪単価分析</span>
+            <span class="tag">売却タイミング</span>
+            <span class="tag">延伸後予測</span>
+            <span class="tag">修繕費シミュレーション</span>
+          </div>
+        </div>
+        <div class="feature-card gold">
+          <div class="feature-num">04</div>
+          <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+          <h3 class="feature-title">豊洲エリア医療ナビ</h3>
+          <p class="feature-text">内科・小児科・産婦人科・精神科など、豊洲・江東区の医療機関データベース。口コミ・混雑状況・予約方法をAIが整理。昭和大学病院・聖路加国際病院へのアクセス情報も。</p>
+          <div class="feature-tags">
+            <span class="tag gold-tag">クリニック検索</span>
+            <span class="tag gold-tag">小児科</span>
+            <span class="tag gold-tag">産婦人科</span>
+            <span class="tag gold-tag">混雑情報</span>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-num">05</div>
+          <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <h3 class="feature-title">子育てコミュニティ・行政情報</h3>
+          <p class="feature-text">保育園申請サポート、豊洲の小学校情報・学区解説、習い事情報、ベビーシッター紹介、江東区の子育て支援制度の一覧と申請ガイド。PTA・自治会の情報も網羅。</p>
+          <div class="feature-tags">
+            <span class="tag">保育園申請</span>
+            <span class="tag">小学校情報</span>
+            <span class="tag">習い事</span>
+            <span class="tag">江東区制度</span>
+          </div>
+        </div>
+        <div class="feature-card gold">
+          <div class="feature-num">06</div>
+          <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg></div>
+          <h3 class="feature-title">24時間AIチャットアシスタント</h3>
+          <p class="feature-text">上記すべての情報に、自然な日本語会話でアクセス。「豊洲のSAPIXって実際どう？」「大地震のとき40階から降りる方法は？」など、リアルな質問に即座に回答します。</p>
+          <div class="feature-tags">
+            <span class="tag gold-tag">24時間対応</span>
+            <span class="tag gold-tag">豊洲特化AI</span>
+            <span class="tag gold-tag">自然言語</span>
+            <span class="tag gold-tag">即座に回答</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI DEMO -->
+  <section class="ai-demo-section">
+    <div class="container">
+      <div class="ai-demo-inner">
+        <div class="ai-demo-text">
+          <div class="section-label" style="color:var(--gold)">AIデモ</div>
+          <h2 class="section-title" style="color:white">豊洲に特化した<br>AIアシスタントとは</h2>
+          <p class="section-subtitle" style="color:rgba(255,255,255,0.6)">一般的なAIと違い、豊洲エリアのデータを深く学習。タワマン住民のリアルな疑問に、的確に答えます。</p>
+          <div class="ai-demo-items">
+            <div class="ai-demo-item">
+              <div class="ai-demo-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div>
+                <div class="ai-demo-item-title">豊洲の最新情報を学習済み</div>
+                <div class="ai-demo-item-text">豊洲エリアの塾・医療・不動産データを継続的に更新。2026年最新情報に対応。</div>
+              </div>
+            </div>
+            <div class="ai-demo-item">
+              <div class="ai-demo-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div>
+                <div class="ai-demo-item-title">あなたの状況に合わせた回答</div>
+                <div class="ai-demo-item-text">子供の学年、居住マンション、家族構成を覚えて、個人に最適化されたアドバイスを提供。</div>
+              </div>
+            </div>
+            <div class="ai-demo-item">
+              <div class="ai-demo-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div>
+                <div class="ai-demo-item-title">プライバシー完全保護</div>
+                <div class="ai-demo-item-text">会話内容は第三者に共有されません。タワマン住民同士の情報戦に巻き込まれず、安心して相談できます。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="chat-mockup">
+          <div class="chat-header">
+            <div class="chat-avatar">AI</div>
+            <div>
+              <div class="chat-name">豊洲ライフナビ AI</div>
+              <div class="chat-status"><span class="online-dot"></span>オンライン</div>
+            </div>
+          </div>
+          <div class="chat-body">
+            <div class="msg msg-user">
+              <div class="msg-bubble">SAPIXの豊洲校って、実際のところどうですか？小4から入るのは遅すぎますか？</div>
+              <div class="msg-time">14:32</div>
+            </div>
+            <div class="msg msg-ai">
+              <div class="msg-bubble">豊洲エリアではSAPIX豊洲校が最も選ばれています。小4（新4年生2月）スタートは標準的で、むしろ豊洲タワマンの中学受験世帯では小3冬から動き出すケースが多いです。<br><br>ご状況をお聞かせいただければ、志望校レベルと入塾時期の最適プランをお伝えできます。</div>
+              <div class="msg-time">14:32</div>
+            </div>
+            <div class="msg msg-user">
+              <div class="msg-bubble">麻布・駒東あたりを考えています</div>
+              <div class="msg-time">14:33</div>
+            </div>
+            <div style="align-self:flex-start">
+              <div class="typing"><span></span><span></span><span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing-section" id="pricing">
+    <div class="container">
+      <div class="pricing-header">
+        <div class="section-label">料金プラン</div>
+        <h2 class="section-title">月10万円の利益を目指す<br>シンプルな2プラン</h2>
+        <p class="section-subtitle">初回から課金制。本気で豊洲生活を改善したい方だけに届けます。</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-plan-name">スタンダード</div>
+          <div class="pricing-plan-desc">DINKSや個人向け基本プラン</div>
+          <div class="pricing-amount">
+            <div class="pricing-yen">2,980</div>
+            <div class="pricing-period">円 / 月</div>
+          </div>
+          <div class="pricing-tax">税込</div>
+          <ul class="pricing-features">
+            <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">AIチャット（月100回まで）</span></li>
+            <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">防災・資産価値情報</span></li>
+            <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">医療機関データベース</span></li>
+            <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">行政・生活情報</span></li>
+            <li><span class="pf-check" style="color:var(--gray-400)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span><span class="pf-text" style="color:var(--gray-400)">中学受験専門AIアドバイザー</span></li>
+            <li><span class="pf-check" style="color:var(--gray-400)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span><span class="pf-text" style="color:var(--gray-400)">資産価値シミュレーター（詳細版）</span></li>
+          </ul>
+          <button class="btn-pricing" onclick="openModal('standard')">スタンダードで始める</button>
+        </div>
+        <div class="pricing-card featured">
+          <div class="pricing-badge">最も選ばれています</div>
+          <div class="pricing-plan-name">プレミアム</div>
+          <div class="pricing-plan-desc">ファミリー・中学受験世帯に最適</div>
+          <div class="pricing-amount">
+            <div class="pricing-yen">4,980</div>
+            <div class="pricing-period">円 / 月</div>
+          </div>
+          <div class="pricing-tax">税込</div>
+          <ul class="pricing-features">
+            <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">AIチャット<strong>（無制限）</strong></span></li>
+            <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">防災・資産価値情報（全機能）</span></li>
+            <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">医療機関データベース（優先情報付き）</span></li>
+            <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text">行政・生活情報（申請サポート付き）</span></li>
+            <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text"><strong>中学受験専門AIアドバイザー</strong></span></li>
+            <li><span class="pf-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="pf-text"><strong>資産価値シミュレーター（詳細版）</strong></span></li>
+          </ul>
+          <button class="btn-pricing featured-btn" onclick="openModal('premium')">プレミアムで始める</button>
+        </div>
+      </div>
+      <p style="text-align:center;font-size:0.8rem;color:var(--text-light);margin-top:1.5rem">※ 初回から課金が必要です。いつでも解約可能。解約後は即日サービス停止。</p>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="testimonials-header">
+        <div class="section-label">ユーザーの声</div>
+        <h2 class="section-title">豊洲住民が実際に感じた変化</h2>
+        <p class="section-subtitle">豊洲タワマンで実際に暮らす方々のリアルな声をご紹介します（掲載許可取得済み）。</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="testimonial-text">中学受験で焦っていましたが、豊洲エリアの塾情報と志望校対策を具体的に相談できて本当に助かりました。一般的なAIより断然、豊洲に特化した内容で信頼できます。</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">T</div>
+            <div>
+              <div class="testimonial-name">T.K. さん</div>
+              <div class="testimonial-role">40代 / パークシティ豊洲在住 / 子供2人</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="testimonial-text">能登地震のニュースを見てから豊洲の液状化が心配になっていましたが、このサービスで具体的な備蓄リストと避難シミュレーションができて、家族で防災意識が変わりました。</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">M</div>
+            <div>
+              <div class="testimonial-name">M.S. さん</div>
+              <div class="testimonial-role">38歳 / シティタワーズ豊洲在住 / DINKS</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+          <p class="testimonial-text">有楽町線延伸後の資産価値シミュレーションが特に役立ちました。売り時を今から逆算して考えられるようになり、夫婦で資産運用の話ができるようになりました。</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">Y</div>
+            <div>
+              <div class="testimonial-name">Y.N. さん</div>
+              <div class="testimonial-role">44歳 / アーバンドックパークシティ豊洲在住</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEO CONTENT -->
+  <section class="seo-section" id="area">
+    <div class="container">
+      <div class="section-label">エリア情報</div>
+      <h2 class="section-title">豊洲・湾岸エリアを<br>知り尽くした専門サービス</h2>
+      <div class="seo-grid">
+        <div class="seo-block">
+          <h3>豊洲タワマン住民の現実</h3>
+          <p>東京メトロ有楽町線・ゆりかもめが乗り入れる豊洲駅。2024年度の1日平均乗降人員は21万人超（130駅中第5位）。3LDKが1億円超えのタワーマンションが林立し、世帯年収1,200〜2,000万円層が集住するこのエリアは、一見「勝ち組の街」です。</p>
+          <p>しかし実際には、過熱する中学受験競争、液状化・地震への潜在的恐怖、タワマン管理費の高騰、医療機関不足、コミュニティの閉塞感など、固有の悩みを抱えた住民が多数存在します。豊洲ライフナビはこうした課題を解決するために生まれました。</p>
+          <div class="area-links">
+            <a href="#" class="area-link">豊洲 中学受験</a>
+            <a href="#" class="area-link">豊洲 防災</a>
+            <a href="#" class="area-link">豊洲 タワマン 資産価値</a>
+            <a href="#" class="area-link">豊洲 子育て</a>
+            <a href="#" class="area-link">豊洲 医療</a>
+          </div>
+        </div>
+        <div class="seo-block">
+          <h3>将来展開エリア</h3>
+          <p>豊洲ライフナビは、豊洲を皮切りに東京湾岸・都心の富裕層エリアへの展開を予定しています。各エリア固有の課題と住民ニーズに特化したサービスを順次リリースします。</p>
+          <div class="area-links">
+            <a href="#" class="area-link">勝鬨駅エリア（予定）</a>
+            <a href="#" class="area-link">月島駅エリア（予定）</a>
+            <a href="#" class="area-link">銀座駅エリア（予定）</a>
+            <a href="#" class="area-link">晴海エリア（予定）</a>
+            <a href="#" class="area-link">有明エリア（予定）</a>
+          </div>
+          <p style="margin-top:1rem">各エリアの先行登録（無料）は<a href="#" onclick="openModal('standard')">こちら</a>から。豊洲版プレミアム会員の方は、新エリアリリース時に優先案内します。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <div class="container">
+      <div class="section-label">よくある質問</div>
+      <h2 class="section-title">よくある質問</h2>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <div class="faq-q">豊洲に住んでいなくても使えますか？</div>
+          <div class="faq-a">現在は豊洲・湾岸エリア（豊洲1〜6丁目、東雲周辺）の住民を対象に設計されています。近隣エリアの方もご利用いただけますが、最も価値を発揮するのは豊洲在住の方です。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">AIの回答はどれくらい正確ですか？</div>
+          <div class="faq-a">豊洲エリアの公開情報・不動産データ・教育情報を学習した専用AIです。最新情報の反映に努めていますが、医療・法律・金融に関する最終判断は専門家にご相談ください。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">解約はいつでもできますか？</div>
+          <div class="faq-a">はい、マイページからいつでも即日解約可能です。解約後は当月末日まで利用可能で、翌月からの課金が停止します。違約金・解約手数料は一切ありません。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">個人情報・会話内容は安全ですか？</div>
+          <div class="faq-a">Stripe決済による安全な支払い処理、会話データの暗号化保存を行っています。第三者への情報提供は一切行いません。詳細はプライバシーポリシーをご確認ください。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">スタンダードとプレミアムの主な違いは？</div>
+          <div class="faq-a">最大の違いは「中学受験専門AIアドバイザー」と「資産価値シミュレーター詳細版」の有無です。お子さんの中学受験を考えている方や、マンション売却タイミングを真剣に検討中の方にはプレミアムをお勧めします。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">スマートフォンでも使えますか？</div>
+          <div class="faq-a">はい、完全レスポンシブ対応です。スマートフォン・タブレット・PCいずれでも快適にご利用いただけます。アプリインストールは不要で、ブラウザからアクセスするだけです。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-inner">
+      <h2 class="cta-title">豊洲の暮らしを、もっと安心に。<br>もっと賢く。</h2>
+      <p class="cta-subtitle">今すぐ登録して、豊洲タワマン住民専用AIアシスタントを体験してください。</p>
+      <div class="cta-actions">
+        <button class="btn-primary" onclick="openModal('premium')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          プレミアム（4,980円/月）で始める
+        </button>
+        <button class="btn-ghost" onclick="openModal('standard')">スタンダード（2,980円/月）で始める</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand-name">豊洲ライフナビ</div>
+          <p class="footer-brand-desc">豊洲・湾岸タワマン住民専用のAI情報サービス。中学受験・防災・資産価値・子育て・医療をトータルサポートします。<br>将来は勝鬨・月島・銀座エリアへも展開予定。</p>
+        </div>
+        <div>
+          <div class="footer-col-title">サービス</div>
+          <ul class="footer-links">
+            <li><a href="#features">機能一覧</a></li>
+            <li><a href="#pricing">料金プラン</a></li>
+            <li><a href="#faq">よくある質問</a></li>
+            <li><a href="#area">対応エリア</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">情報</div>
+          <ul class="footer-links">
+            <li><a href="#">豊洲 中学受験ガイド</a></li>
+            <li><a href="#">豊洲 防災マップ</a></li>
+            <li><a href="#">タワマン資産価値</a></li>
+            <li><a href="#">江東区 子育て情報</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">会社情報</div>
+          <ul class="footer-links">
+            <li><a href="#">運営会社</a></li>
+            <li><a href="#">お問い合わせ</a></li>
+            <li><a href="#">特定商取引法</a></li>
+            <li><a href="#">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="footer-copy">&copy; 2026 豊洲ライフナビ All Rights Reserved.</span>
+        <div class="footer-legal">
+          <a href="#">利用規約</a>
+          <a href="#">プライバシーポリシー</a>
+          <a href="#">特定商取引法に基づく表示</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /landing-page -->
+
+<!-- APP SECTION (after login) -->
+<div id="app-section" class="app-section">
+  <div class="app-layout">
+    <nav class="sidebar">
+      <ul class="sidebar-menu">
+        <li class="sidebar-item active" onclick="showAppPage('dashboard', this)">
+          <a href="#">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            ダッシュボード
+          </a>
+        </li>
+        <li class="sidebar-item" onclick="showAppPage('chat', this)">
+          <a href="#">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            AIチャット
+          </a>
+        </li>
+        <div class="sidebar-label">専門機能</div>
+        <li class="sidebar-item" onclick="showAppPage('exam', this)">
+          <a href="#">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+            中学受験
+          </a>
+        </li>
+        <li class="sidebar-item" onclick="showAppPage('disaster', this)">
+          <a href="#">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+            防災プランナー
+          </a>
+        </li>
+        <li class="sidebar-item" onclick="showAppPage('asset', this)">
+          <a href="#">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            資産価値
+          </a>
+        </li>
+        <li class="sidebar-item" onclick="showAppPage('medical', this)">
+          <a href="#">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            医療ナビ
+          </a>
+        </li>
+        <div class="sidebar-label">アカウント</div>
+        <li class="sidebar-item" onclick="logout()">
+          <a href="#">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            ログアウト
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <main class="app-main">
+
+      <!-- DASHBOARD PAGE -->
+      <div class="app-page active" id="page-dashboard">
+        <div class="app-greeting">おかえりなさい、豊洲住民の方</div>
+        <div class="app-greeting-sub">豊洲ライフナビへようこそ。今日も安心の生活を。</div>
+        <div class="dashboard-grid">
+          <div class="dash-card">
+            <div class="dash-card-icon" style="background:rgba(15,30,56,0.08);color:var(--navy)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+            <div class="dash-card-label">今月のAIチャット</div>
+            <div class="dash-card-value">23回</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-icon" style="background:rgba(201,168,76,0.1);color:var(--gold)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+            <div class="dash-card-label">プラン</div>
+            <div class="dash-card-value" style="font-size:1.1rem">プレミアム</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-icon" style="background:rgba(46,204,113,0.1);color:#27ae60"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="dash-card-label">防災チェック</div>
+            <div class="dash-card-value" style="font-size:1.1rem;color:#27ae60">完了</div>
+          </div>
+        </div>
+        <div style="background:white;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.5rem">
+          <div style="font-family:'Shippori Mincho',serif;font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:1rem">おすすめのアクション</div>
+          <div style="display:flex;flex-direction:column;gap:0.75rem">
+            <div style="display:flex;align-items:center;gap:12px;padding:0.75rem;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:var(--radius);cursor:pointer" onclick="showAppPage('exam', null)">
+              <div style="width:36px;height:36px;background:rgba(201,168,76,0.15);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--gold);flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
+              <div><div style="font-size:0.875rem;font-weight:600;color:var(--navy)">中学受験 — 2026年最新塾情報を確認</div><div style="font-size:0.75rem;color:var(--text-light)">SAPIXの豊洲校最新クラス情報が更新されました</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:0.75rem;background:rgba(15,30,56,0.03);border:1px solid var(--gray-200);border-radius:var(--radius);cursor:pointer" onclick="showAppPage('asset', null)">
+              <div style="width:36px;height:36px;background:rgba(15,30,56,0.06);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--navy);flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+              <div><div style="font-size:0.875rem;font-weight:600;color:var(--navy)">資産価値シミュレーション</div><div style="font-size:0.75rem;color:var(--text-light)">有楽町線延伸発表後の価格予測を更新</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHAT PAGE -->
+      <div class="app-page" id="page-chat">
+        <div class="app-greeting">AIチャット</div>
+        <div class="app-greeting-sub">豊洲生活のどんな疑問でも、気軽に質問してください。</div>
+        <div class="quick-topics">
+          <button class="quick-topic" onclick="sendQuickTopic('SAPIXの豊洲校について教えて')">SAPIX豊洲校</button>
+          <button class="quick-topic" onclick="sendQuickTopic('豊洲の液状化リスクについて')">液状化リスク</button>
+          <button class="quick-topic" onclick="sendQuickTopic('豊洲の資産価値は今後どうなる？')">資産価値予測</button>
+          <button class="quick-topic" onclick="sendQuickTopic('豊洲近くのおすすめ小児科を教えて')">小児科</button>
+          <button class="quick-topic" onclick="sendQuickTopic('保育園の申請手順を教えて')">保育園申請</button>
+          <button class="quick-topic" onclick="sendQuickTopic('タワマンの防災備蓄リストを作って')">防災備蓄リスト</button>
+        </div>
+        <div class="app-chat-wrap">
+          <div class="app-chat-header">
+            <div class="chat-avatar" style="width:28px;height:28px;font-size:0.65rem">AI</div>
+            <div class="app-chat-title">豊洲ライフナビ AI</div>
+            <div class="app-chat-status"><span class="online-dot"></span>オンライン</div>
+          </div>
+          <div class="app-chat-messages" id="chat-messages">
+            <div class="app-msg ai">
+              <div class="app-msg-bubble">こんにちは。豊洲ライフナビ AIアシスタントです。<br><br>中学受験・防災・資産価値・医療・子育てなど、豊洲生活に関することなら何でもお答えします。何でも気軽に聞いてください。</div>
+            </div>
+          </div>
+          <div class="app-chat-input">
+            <textarea class="app-input" id="chat-input" placeholder="豊洲生活について質問する..." rows="1" onkeydown="handleChatKey(event)"></textarea>
+            <button class="app-send" onclick="sendChat()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXAM PAGE -->
+      <div class="app-page" id="page-exam">
+        <div class="app-greeting">中学受験AIアドバイザー</div>
+        <div class="app-greeting-sub">豊洲・湾岸エリアの受験最新情報と、あなたのお子さんに合った戦略を提案します。</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem">
+          <div style="background:white;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:1.5rem">
+            <div style="font-family:'Shippori Mincho',serif;font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:1rem">豊洲エリア主要塾</div>
+            <div style="display:flex;flex-direction:column;gap:0.6rem">
+              <div style="display:flex;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid var(--gray-100)"><span style="font-size:0.85rem;color:var(--text)">SAPIX 豊洲校</span><span style="font-size:0.78rem;background:rgba(15,30,56,0.06);color:var(--navy);padding:2px 8px;border-radius:2px">最人気</span></div>
+              <div style="display:flex;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid var(--gray-100)"><span style="font-size:0.85rem;color:var(--text)">日能研 豊洲</span><span style="font-size:0.78rem;background:rgba(201,168,76,0.1);color:#7a5e1a;padding:2px 8px;border-radius:2px">実績豊富</span></div>
+              <div style="display:flex;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid var(--gray-100)"><span style="font-size:0.85rem;color:var(--text)">早稲田アカデミー</span><span style="font-size:0.78rem;color:var(--text-light)">豊洲駅近</span></div>
+              <div style="display:flex;justify-content:space-between;padding:0.6rem 0"><span style="font-size:0.85rem;color:var(--text)">栄光ゼミナール 豊洲</span><span style="font-size:0.78rem;color:var(--text-light)">少人数制</span></div>
+            </div>
+          </div>
+          <div style="background:white;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:1.5rem">
+            <div style="font-family:'Shippori Mincho',serif;font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:1rem">豊洲住民の志望校傾向</div>
+            <div style="display:flex;flex-direction:column;gap:0.5rem">
+              <div style="font-size:0.82rem;color:var(--text-light);padding:0.5rem 0;border-bottom:1px solid var(--gray-100)">男子：麻布・駒東・武蔵・開成</div>
+              <div style="font-size:0.82rem;color:var(--text-light);padding:0.5rem 0;border-bottom:1px solid var(--gray-100)">女子：桜蔭・女子学院・雙葉・鴎友</div>
+              <div style="font-size:0.82rem;color:var(--text-light);padding:0.5rem 0">共学：渋幕・渋渋・広尾学園</div>
+            </div>
+          </div>
+        </div>
+        <div class="app-chat-wrap">
+          <div class="app-chat-header">
+            <div class="chat-avatar" style="width:28px;height:28px;font-size:0.65rem">AI</div>
+            <div class="app-chat-title">中学受験AIアドバイザー</div>
+          </div>
+          <div class="app-chat-messages" id="exam-messages">
+            <div class="app-msg ai">
+              <div class="app-msg-bubble">中学受験アドバイザーです。お子さんの学年・志望校・現在の状況を教えてください。豊洲エリアの情報を踏まえた最適なアドバイスをお伝えします。</div>
+            </div>
+          </div>
+          <div class="app-chat-input">
+            <textarea class="app-input" id="exam-input" placeholder="例：小4の子がいます。麻布を目指したいのですが..." rows="1" onkeydown="handleExamKey(event)"></textarea>
+            <button class="app-send" onclick="sendExamChat()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DISASTER PAGE -->
+      <div class="app-page" id="page-disaster">
+        <div class="app-greeting">防災プランナー</div>
+        <div class="app-greeting-sub">豊洲タワマン住民専用の防災対策を作成します。</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.5rem">
+          <div style="background:white;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:1.25rem;border-top:3px solid #e74c3c">
+            <div style="font-size:0.75rem;color:#c0392b;font-weight:600;margin-bottom:4px">液状化リスク</div>
+            <div style="font-family:'Shippori Mincho',serif;font-size:1.3rem;font-weight:700;color:#c0392b">中〜高</div>
+            <div style="font-size:0.72rem;color:var(--text-light);margin-top:4px">豊洲3〜5丁目は要注意</div>
+          </div>
+          <div style="background:white;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:1.25rem;border-top:3px solid #f39c12">
+            <div style="font-size:0.75rem;color:#e67e22;font-weight:600;margin-bottom:4px">浸水リスク</div>
+            <div style="font-family:'Shippori Mincho',serif;font-size:1.3rem;font-weight:700;color:#e67e22">中</div>
+            <div style="font-size:0.72rem;color:var(--text-light);margin-top:4px">ゼロメートル地帯</div>
+          </div>
+          <div style="background:white;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:1.25rem;border-top:3px solid #27ae60">
+            <div style="font-size:0.75rem;color:#27ae60;font-weight:600;margin-bottom:4px">タワマン耐震性</div>
+            <div style="font-family:'Shippori Mincho',serif;font-size:1.3rem;font-weight:700;color:#27ae60">高</div>
+            <div style="font-size:0.72rem;color:var(--text-light);margin-top:4px">新耐震基準以降の物件</div>
+          </div>
+        </div>
+        <div class="app-chat-wrap">
+          <div class="app-chat-header">
+            <div class="chat-avatar" style="width:28px;height:28px;font-size:0.65rem">AI</div>
+            <div class="app-chat-title">防災AIアドバイザー</div>
+          </div>
+          <div class="app-chat-messages" id="disaster-messages">
+            <div class="app-msg ai">
+              <div class="app-msg-bubble">豊洲タワマン防災アドバイザーです。<br><br>居住マンション名・階数・家族構成を教えていただければ、個別の備蓄リストと避難計画を作成します。また、「タワマン停電時の対応」「液状化後の生活」など具体的な質問もどうぞ。</div>
+            </div>
+          </div>
+          <div class="app-chat-input">
+            <textarea class="app-input" id="disaster-input" placeholder="例：35階に4人家族で住んでいます。備蓄リストを作ってください..." rows="1" onkeydown="handleDisasterKey(event)"></textarea>
+            <button class="app-send" onclick="sendDisasterChat()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASSET PAGE -->
+      <div class="app-page" id="page-asset">
+        <div class="app-greeting">不動産資産価値シミュレーター</div>
+        <div class="app-greeting-sub">豊洲エリアの最新相場データを元に、あなたのマンションの価値を分析します。</div>
+        <div style="background:white;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.5rem">
+          <div style="font-family:'Shippori Mincho',serif;font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:1.25rem">豊洲エリア坪単価推移（2025年）</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem">
+            <div style="text-align:center;padding:1rem;background:var(--gray-50);border-radius:var(--radius)">
+              <div style="font-size:0.7rem;color:var(--text-light);margin-bottom:4px">豊洲</div>
+              <div style="font-family:'Shippori Mincho',serif;font-size:1.2rem;font-weight:700;color:var(--navy)">663万円</div>
+              <div style="font-size:0.68rem;color:#27ae60">+1.1%</div>
+            </div>
+            <div style="text-align:center;padding:1rem;background:var(--gray-50);border-radius:var(--radius)">
+              <div style="font-size:0.7rem;color:var(--text-light);margin-bottom:4px">晴海</div>
+              <div style="font-family:'Shippori Mincho',serif;font-size:1.2rem;font-weight:700;color:var(--navy)">672万円</div>
+              <div style="font-size:0.68rem;color:#27ae60">+1.2%</div>
+            </div>
+            <div style="text-align:center;padding:1rem;background:var(--gray-50);border-radius:var(--radius)">
+              <div style="font-size:0.7rem;color:var(--text-light);margin-bottom:4px">勝鬨・月島</div>
+              <div style="font-family:'Shippori Mincho',serif;font-size:1.2rem;font-weight:700;color:var(--navy)">853万円</div>
+              <div style="font-size:0.68rem;color:#27ae60">+1.6%</div>
+            </div>
+            <div style="text-align:center;padding:1rem;background:var(--gray-50);border-radius:var(--radius)">
+              <div style="font-size:0.7rem;color:var(--text-light);margin-bottom:4px">東雲</div>
+              <div style="font-family:'Shippori Mincho',serif;font-size:1.2rem;font-weight:700;color:var(--navy)">459万円</div>
+              <div style="font-size:0.68rem;color:#27ae60">+1.3%</div>
+            </div>
+          </div>
+        </div>
+        <div class="app-chat-wrap">
+          <div class="app-chat-header">
+            <div class="chat-avatar" style="width:28px;height:28px;font-size:0.65rem">AI</div>
+            <div class="app-chat-title">資産価値AIアドバイザー</div>
+          </div>
+          <div class="app-chat-messages" id="asset-messages">
+            <div class="app-msg ai">
+              <div class="app-msg-bubble">資産価値アドバイザーです。<br><br>マンション名・専有面積・購入時期・購入価格をお教えいただければ、現在の推定時価・有楽町線延伸後の予測・最適な売却タイミングをお伝えします。</div>
+            </div>
+          </div>
+          <div class="app-chat-input">
+            <textarea class="app-input" id="asset-input" placeholder="例：パークシティ豊洲、65㎡、2019年購入、9,500万円でした..." rows="1" onkeydown="handleAssetKey(event)"></textarea>
+            <button class="app-send" onclick="sendAssetChat()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEDICAL PAGE -->
+      <div class="app-page" id="page-medical">
+        <div class="app-greeting">豊洲エリア医療ナビ</div>
+        <div class="app-greeting-sub">豊洲・江東区の医療機関を検索し、AIが最適なクリニックを提案します。</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem">
+          <div style="background:white;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:1.5rem">
+            <div style="font-family:'Shippori Mincho',serif;font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:1rem">近隣主要医療機関</div>
+            <div style="display:flex;flex-direction:column;gap:0.5rem">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid var(--gray-100)"><span style="font-size:0.82rem">昭和大学病院</span><span style="font-size:0.72rem;color:var(--text-light)">総合 / 約15分</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid var(--gray-100)"><span style="font-size:0.82rem">聖路加国際病院</span><span style="font-size:0.72rem;color:var(--text-light)">総合 / 約20分</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid var(--gray-100)"><span style="font-size:0.82rem">東京女子医大東医療センター</span><span style="font-size:0.72rem;color:var(--text-light)">総合</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0"><span style="font-size:0.82rem">江東病院</span><span style="font-size:0.72rem;color:var(--text-light)">総合 / 江東区</span></div>
+            </div>
+          </div>
+          <div style="background:white;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:1.5rem">
+            <div style="font-family:'Shippori Mincho',serif;font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:1rem">科目別クリニック（豊洲）</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <span style="font-size:0.78rem;padding:5px 10px;background:rgba(15,30,56,0.05);color:var(--navy);border-radius:2px">内科</span>
+              <span style="font-size:0.78rem;padding:5px 10px;background:rgba(15,30,56,0.05);color:var(--navy);border-radius:2px">小児科</span>
+              <span style="font-size:0.78rem;padding:5px 10px;background:rgba(201,168,76,0.1);color:#7a5e1a;border-radius:2px">産婦人科</span>
+              <span style="font-size:0.78rem;padding:5px 10px;background:rgba(15,30,56,0.05);color:var(--navy);border-radius:2px">皮膚科</span>
+              <span style="font-size:0.78rem;padding:5px 10px;background:rgba(15,30,56,0.05);color:var(--navy);border-radius:2px">整形外科</span>
+              <span style="font-size:0.78rem;padding:5px 10px;background:rgba(15,30,56,0.05);color:var(--navy);border-radius:2px">眼科</span>
+              <span style="font-size:0.78rem;padding:5px 10px;background:rgba(15,30,56,0.05);color:var(--navy);border-radius:2px">歯科</span>
+              <span style="font-size:0.78rem;padding:5px 10px;background:rgba(15,30,56,0.05);color:var(--navy);border-radius:2px">精神科</span>
+            </div>
+          </div>
+        </div>
+        <div class="app-chat-wrap">
+          <div class="app-chat-header">
+            <div class="chat-avatar" style="width:28px;height:28px;font-size:0.65rem">AI</div>
+            <div class="app-chat-title">医療ナビAI</div>
+          </div>
+          <div class="app-chat-messages" id="medical-messages">
+            <div class="app-msg ai">
+              <div class="app-msg-bubble">医療ナビAIです。症状・受診したい科・年齢をお教えください。豊洲・江東区エリアで最適なクリニックをご提案します。<br><br>「子供が熱を出した」「妊娠中で産婦人科を探している」など、具体的にお聞かせください。</div>
+            </div>
+          </div>
+          <div class="app-chat-input">
+            <textarea class="app-input" id="medical-input" placeholder="例：3歳の子供に小児科を探しています..." rows="1" onkeydown="handleMedicalKey(event)"></textarea>
+            <button class="app-send" onclick="sendMedicalChat()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">会員登録 / ログイン</div>
+      <button class="modal-close" onclick="closeModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="modal-body">
+      <div class="tab-group">
+        <button class="tab-btn active" id="tab-register" onclick="switchTab('register')">新規登録</button>
+        <button class="tab-btn" id="tab-login" onclick="switchTab('login')">ログイン</button>
+      </div>
+
+      <!-- REGISTER TAB -->
+      <div class="tab-pane active" id="pane-register">
+        <div class="modal-plan-display" id="plan-display">
+          <div>
+            <div class="modal-plan-name" id="modal-plan-name">プレミアムプラン</div>
+            <div style="font-size:0.72rem;color:var(--text-light)">選択中のプラン</div>
+          </div>
+          <div class="modal-plan-price" id="modal-plan-price">4,980円/月</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">メールアドレス</label>
+          <input type="email" class="form-input" id="reg-email" placeholder="example@gmail.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">パスワード（8文字以上）</label>
+          <input type="password" class="form-input" id="reg-password" placeholder="••••••••">
+        </div>
+        <div class="form-group">
+          <label class="form-label">クレジットカード情報</label>
+          <div id="card-element"></div>
+          <div class="error-msg" id="card-error"></div>
+        </div>
+        <button class="submit-btn" id="register-btn" onclick="handleRegister()">
+          登録して今すぐ始める
+        </button>
+        <div class="modal-security">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Stripe安全決済 — カード情報はStripeに直接送信されます
+        </div>
+      </div>
+
+      <!-- LOGIN TAB -->
+      <div class="tab-pane" id="pane-login">
+        <div class="form-group">
+          <label class="form-label">メールアドレス</label>
+          <input type="email" class="form-input" id="login-email" placeholder="example@gmail.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">パスワード</label>
+          <input type="password" class="form-input" id="login-password" placeholder="••••••••">
+        </div>
+        <button class="submit-btn" onclick="handleLogin()">ログイン</button>
+        <p style="text-align:center;font-size:0.75rem;color:var(--text-light);margin-top:0.75rem">
+          <a href="#" style="color:var(--bay-blue)">パスワードをお忘れの方</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== STATE =====
+let selectedPlan = 'premium';
+let stripe = null;
+let cardElement = null;
+let isLoggedIn = false;
+
+// ===== PLAN SELECTION =====
+function selectPlan(plan) {
+  selectedPlan = plan;
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.plan-radio').forEach(r => r.style.background = '');
+  document.getElementById('plan-' + plan).classList.add('active');
+  document.getElementById('radio-' + plan).style.background = 'var(--gold)';
+}
+
+// ===== MODAL =====
+function openModal(plan) {
+  selectedPlan = plan || 'premium';
+  updateModalPlan();
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  switchTab('register');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function updateModalPlan() {
+  const names = { standard: 'スタンダードプラン', premium: 'プレミアムプラン' };
+  const prices = { standard: '2,980円/月', premium: '4,980円/月' };
+  document.getElementById('modal-plan-name').textContent = names[selectedPlan];
+  document.getElementById('modal-plan-price').textContent = prices[selectedPlan];
+}
+
+function switchTab(tab) {
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('pane-register').classList.toggle('active', tab === 'register');
+  document.getElementById('pane-login').classList.toggle('active', tab === 'login');
+}
+
+// ===== AUTH HANDLERS (バックエンドAPI連携) =====
+async function handleRegister() {
+  const email = document.getElementById('reg-email').value.trim();
+  const pass = document.getElementById('reg-password').value;
+  const name = document.getElementById('reg-name') ? document.getElementById('reg-name').value.trim() : email.split('@')[0];
+  const btn = document.getElementById('register-btn');
+
+  if (!email || !pass) { showModalError('メールアドレスとパスワードを入力してください'); return; }
+  if (pass.length < 8) { showModalError('パスワードは8文字以上で入力してください'); return; }
+
+  btn.disabled = true;
+  btn.textContent = '登録中...';
+  clearModalError();
+
+  try {
+    // 1. アカウント登録
+    await AuthAPI.register(email, pass, name || email.split('@')[0]);
+
+    // 2. 登録成功 → Stripe Checkoutへリダイレクト
+    btn.textContent = '決済画面へ移動中...';
+    await BillingAPI.startCheckout(selectedPlan);
+    // ↑ Stripeページへリダイレクトするので以降は実行されない
+
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = '登録して決済へ進む';
+    showModalError(err.message || '登録に失敗しました。もう一度お試しください。');
+  }
+}
+
+async function handleLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-password').value;
+  const btn = document.querySelector('#pane-login .submit-btn');
+
+  if (!email || !pass) { showModalError('メールアドレスとパスワードを入力してください'); return; }
+
+  if (btn) { btn.disabled = true; btn.textContent = 'ログイン中...'; }
+  clearModalError();
+
+  try {
+    const { user } = await AuthAPI.login(email, pass);
+    closeModal();
+
+    if (user.plan === 'none') {
+      // 未課金ユーザー → プラン選択へ
+      if (confirm('サブスクリプションに登録するとサービスをご利用いただけます。プランを選択しますか？')) {
+        await BillingAPI.startCheckout(selectedPlan || 'standard');
+      }
+    } else {
+      showApp();
+      updateUserUI(user);
+    }
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.textContent = 'ログイン'; }
+    showModalError(err.message || 'ログインに失敗しました');
+  }
+}
+
+function showModalError(msg) {
+  let el = document.getElementById('modal-error');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'modal-error';
+    el.style.cssText = 'color:#c0392b;font-size:0.82rem;background:#fef0f0;border:1px solid #e74c3c;border-radius:4px;padding:10px 14px;margin-bottom:1rem;';
+    document.getElementById('modal-body')?.prepend(el);
+  }
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function clearModalError() {
+  const el = document.getElementById('modal-error');
+  if (el) el.style.display = 'none';
+}
+
+function updateUserUI(user) {
+  // アプリ内のユーザー名・プラン表示を更新
+  const planLabel = document.getElementById('user-plan-label');
+  if (planLabel) planLabel.textContent = user.plan === 'premium' ? 'プレミアム' : 'スタンダード';
+  const usageInfo = document.getElementById('usage-info');
+  if (usageInfo && user.plan === 'standard') {
+    ChatAPI.getUsage().then(u => {
+      if (u) usageInfo.textContent = `今月の使用量: ${u.count}/100回`;
+    }).catch(() => {});
+  }
+}
+
+// ===== PAGE TRANSITIONS =====
+function showApp() {
+  isLoggedIn = true;
+  document.getElementById('landing-page').style.display = 'none';
+  document.getElementById('app-section').classList.add('visible');
+  window.scrollTo(0, 0);
+
+  // ユーザー情報を取得して表示更新
+  if (window.Auth?.isLoggedIn()) {
+    AuthAPI.getMe().then(({ user }) => updateUserUI(user)).catch(() => {});
+  }
+}
+
+function showLanding() {
+  document.getElementById('landing-page').style.display = 'block';
+  document.getElementById('app-section').classList.remove('visible');
+  window.scrollTo(0, 0);
+}
+
+function showAppPage(page, el) {
+  document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+}
+
+async function logout() {
+  if (window.AuthAPI) {
+    await AuthAPI.logout().catch(() => {});
+  }
+  showLanding();
+}
+
+// マイページ → Stripeポータル（プラン変更・解約）
+async function openBillingPortal() {
+  try {
+    await BillingAPI.openPortal();
+  } catch (err) {
+    alert('カスタマーポータルの起動に失敗しました: ' + err.message);
+  }
+}
+
+// ===== CHAT SYSTEM (バックエンドAPI経由・ストリーミング対応) =====
+// ルーム名マッピング
+const ROOM_MAP = {
+  chat: 'general',
+  exam: 'exam',
+  disaster: 'disaster',
+  asset: 'asset',
+  medical: 'medical',
+};
+
+function addMessage(containerId, role, text) {
+  const container = document.getElementById(containerId);
+  const div = document.createElement('div');
+  div.className = `app-msg ${role}`;
+  div.innerHTML = `<div class="app-msg-bubble">${text.replace(/\n/g, '<br>')}</div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  return div;
+}
+
+function addTyping(containerId) {
+  const container = document.getElementById(containerId);
+  const div = document.createElement('div');
+  div.className = 'app-msg ai';
+  div.id = 'typing-' + containerId;
+  div.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function removeTyping(containerId) {
+  const el = document.getElementById('typing-' + containerId);
+  if (el) el.remove();
+}
+
+const chatHistories = { chat: [], exam: [], disaster: [], asset: [], medical: [] };
+
+async function sendToChat(inputId, messagesId, historyKey) {
+  const input = document.getElementById(inputId);
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  const room = ROOM_MAP[historyKey] || 'general';
+
+  addMessage(messagesId, 'user', text);
+  chatHistories[historyKey].push({ role: 'user', content: text });
+  addTyping(messagesId);
+
+  // ストリーミングAI返答の受け取りバブル
+  let aiBubble = null;
+  let fullText = '';
+
+  await ChatAPI.sendMessage(
+    chatHistories[historyKey],
+    room,
+    // onChunk: テキストが届くたびに呼ばれる
+    (chunk) => {
+      removeTyping(messagesId);
+      if (!aiBubble) {
+        const container = document.getElementById(messagesId);
+        const div = document.createElement('div');
+        div.className = 'app-msg ai';
+        div.innerHTML = '<div class="app-msg-bubble"></div>';
+        container.appendChild(div);
+        aiBubble = div.querySelector('.app-msg-bubble');
+        container.scrollTop = container.scrollHeight;
+      }
+      fullText += chunk;
+      aiBubble.innerHTML = fullText.replace(/\n/g, '<br>');
+      document.getElementById(messagesId).scrollTop = document.getElementById(messagesId).scrollHeight;
+    },
+    // onDone: 完了時
+    (usage) => {
+      chatHistories[historyKey].push({ role: 'assistant', content: fullText });
+      // スタンダードプランの使用量表示更新
+      if (usage && usage.plan === 'standard') {
+        const usageInfo = document.getElementById('usage-info');
+        if (usageInfo) usageInfo.textContent = `今月の使用量: ${usage.count}/100回`;
+      }
+    },
+    // onError: エラー時
+    (errorMsg, code) => {
+      removeTyping(messagesId);
+      if (code === 'USAGE_LIMIT_EXCEEDED') {
+        addMessage(messagesId, 'ai', `⚠️ 今月のAIチャット上限（100回）に達しました。\n<a href="/pricing.html" style="color:var(--gold)">プレミアムプランにアップグレード</a>すると無制限でご利用いただけます。`);
+      } else if (code === 'SUBSCRIPTION_REQUIRED') {
+        addMessage(messagesId, 'ai', `⚠️ この機能はサブスクリプション会員限定です。\n<a href="/pricing.html" style="color:var(--gold)">プランを選択してください。</a>`);
+      } else if (code === 'SESSION_EXPIRED') {
+        addMessage(messagesId, 'ai', 'セッションが期限切れです。再度ログインしてください。');
+        setTimeout(() => { logout(); openModal(selectedPlan); }, 1500);
+      } else {
+        addMessage(messagesId, 'ai', errorMsg || 'エラーが発生しました。しばらく経ってからもう一度お試しください。');
+      }
+    }
+  );
+}
+
+function sendChat() { sendToChat('chat-input', 'chat-messages', 'chat'); }
+function sendExamChat() { sendToChat('exam-input', 'exam-messages', 'exam'); }
+function sendDisasterChat() { sendToChat('disaster-input', 'disaster-messages', 'disaster'); }
+function sendAssetChat() { sendToChat('asset-input', 'asset-messages', 'asset'); }
+function sendMedicalChat() { sendToChat('medical-input', 'medical-messages', 'medical'); }
+
+function sendQuickTopic(text) {
+  document.getElementById('chat-input').value = text;
+  sendChat();
+}
+
+function handleChatKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); } }
+function handleExamKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendExamChat(); } }
+function handleDisasterKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendDisasterChat(); } }
+function handleAssetKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendAssetChat(); } }
+function handleMedicalKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMedicalChat(); } }
+
+// ===== NAV MOBILE =====
+function toggleMenu() {
+  const links = document.getElementById('nav-links');
+  links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
+  links.style.flexDirection = 'column';
+  links.style.position = 'fixed';
+  links.style.top = '64px';
+  links.style.left = '0'; links.style.right = '0';
+  links.style.background = 'rgba(15,30,56,0.98)';
+  links.style.padding = '1rem 2rem 2rem';
+  links.style.gap = '1rem';
+  links.style.zIndex = '99';
+}
+
+// ===== AUTO-LOGIN CHECK =====
+window.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('toyosu_user')) {
+    // Auto-show app if already logged in
+    // showApp(); // Uncomment to enable auto-login
+  }
+});
+</script>
+<script src="api-client.js"></script>
+</body>
+</html>
