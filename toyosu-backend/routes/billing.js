@@ -143,6 +143,21 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
           break;
         }
 
+        // 日付の安全な変換
+        const toISO = (unixTs) => {
+          if (!unixTs) return null;
+          const d = new Date(unixTs * 1000);
+          return isNaN(d.getTime()) ? null : d.toISOString();
+        };
+
+        // サブスクリプションの期間情報を取得（新旧API対応）
+        const periodStart = stripeSubscription.current_period_start
+          || stripeSubscription.items?.data?.[0]?.current_period_start
+          || null;
+        const periodEnd = stripeSubscription.current_period_end
+          || stripeSubscription.items?.data?.[0]?.current_period_end
+          || null;
+
         // サブスクリプションDBに保存
         await db.subscriptions.remove({ userId }, { multi: true });
         await db.subscriptions.insert({
@@ -151,9 +166,9 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
           status: stripeSubscription.status,
           stripeCustomerId: session.customer,
           stripeSubscriptionId: stripeSubscription.id,
-          currentPeriodStart: new Date(stripeSubscription.current_period_start * 1000).toISOString(),
-          currentPeriodEnd: new Date(stripeSubscription.current_period_end * 1000).toISOString(),
-          cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
+          currentPeriodStart: toISO(periodStart),
+          currentPeriodEnd: toISO(periodEnd),
+          cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end || false,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         });
@@ -182,21 +197,32 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
         if (!userId) break;
 
+        const toISO2 = (unixTs) => {
+          if (!unixTs) return null;
+          const d = new Date(unixTs * 1000);
+          return isNaN(d.getTime()) ? null : d.toISOString();
+        };
+
+        const periodStart2 = sub.current_period_start
+          || sub.items?.data?.[0]?.current_period_start || null;
+        const periodEnd2 = sub.current_period_end
+          || sub.items?.data?.[0]?.current_period_end || null;
+
         await db.subscriptions.update(
           { stripeSubscriptionId: sub.id },
           {
             $set: {
               status: sub.status,
               plan: plan || (await getPlanFromSub(sub)),
-              currentPeriodStart: new Date(sub.current_period_start * 1000).toISOString(),
-              currentPeriodEnd: new Date(sub.current_period_end * 1000).toISOString(),
-              cancelAtPeriodEnd: sub.cancel_at_period_end,
+              currentPeriodStart: toISO2(periodStart2),
+              currentPeriodEnd: toISO2(periodEnd2),
+              cancelAtPeriodEnd: sub.cancel_at_period_end || false,
               updatedAt: new Date().toISOString(),
             },
           }
         );
 
-        const newPlan = sub.status === 'active' ? plan : 'none';
+        const newPlan = sub.status === 'active' ? (plan || await getPlanFromSub(sub)) : 'none';
         await db.users.update(
           { _id: userId },
           { $set: { plan: newPlan, updatedAt: new Date().toISOString() } }
